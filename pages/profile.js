@@ -5,7 +5,7 @@ import AppLayout from "../components/AppLayout";
 const Profile = () => (
   <AppLayout>
     <Head>
-      <title>NodeBird</title>
+      <title>내 프로필</title>
     </Head>
     <div>내 프로필</div>
   </AppLayout>
