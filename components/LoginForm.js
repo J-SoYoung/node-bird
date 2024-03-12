@@ -8,6 +8,7 @@ import { useDispatch } from "react-redux";
 
 const ButtonWrapper = styled.div`
   margin-top: 10px;
+  text-align: center;
 `;
 const LoginFormWrapper = styled(Form)`
   padding: 10px;

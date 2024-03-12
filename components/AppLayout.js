@@ -1,11 +1,12 @@
 import React from "react";
-import PropTypes from "prop-types";
 import Link from "next/link";
+import Head from "next/head";
+import { useSelector } from "react-redux";
 import { Menu, Input, Row, Col } from "antd";
+import PropTypes from "prop-types";
+import styled from "styled-components";
 import UserProfile from "./UserProfile";
 import LoginForm from "./LoginForm";
-import styled from "styled-components";
-import { useSelector } from "react-redux";
 
 const MainWrapper = styled(Col)`
   min-height: 500px;
@@ -22,6 +23,9 @@ const AppLayout = ({ children }) => {
 
   return (
     <div>
+      <Head>
+        <title>NodeBird</title>
+      </Head>
       <Menu mode="horizontal">
         <Menu.Item key="home">
           <Link href="/">노드버드</Link>
