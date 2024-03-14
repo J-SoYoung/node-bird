@@ -5,15 +5,16 @@ import {
   RetweetOutlined,
   HeartTwoTone,
 } from "@ant-design/icons";
-import { Avatar, Button, Card, Comment,  Popover } from "antd";
+import { Avatar, Button, Card, Comment, Popover } from "antd";
 import React, { useCallback, useState } from "react";
 import { useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import PostImages from "./PostImages";
 import CommentForm from "./CommentForm";
+import PostCardContent from "./PostCardContent";
 
 const PostCard = ({ post }) => {
-  console.log(post.Comments);
+  console.log(post);
   const id = useSelector((state) => state.user.me?.id);
 
   const [liked, setLiked] = useState(false);
@@ -28,7 +29,6 @@ const PostCard = ({ post }) => {
 
   return (
     <div>
-      <img src=""/>
       <Card
         cover={post.Images[0] && <PostImages images={post.Images} />}
         actions={[
@@ -68,15 +68,15 @@ const PostCard = ({ post }) => {
         <Card.Meta
           avatar={<Avatar>{post.User.nickname[0]}</Avatar>}
           title={post.User.nickname}
-          description={post.contents}
+          description={
+            <PostCardContent postData={post.contents}></PostCardContent>
+          }
         />
       </Card>
       {commentFormOpen && (
         <div>
           <CommentForm post={post} />
-          <div>
-            {`${post.Comments.length}개의 댓글`}
-          </div>
+          <div>{`${post.Comments.length}개의 댓글`}</div>
           {post.Comments.map((c, idx) => {
             return (
               <Comment

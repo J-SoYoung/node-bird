@@ -9,13 +9,13 @@ export const initialState = {
       contents: "첫번재 게시글 #해시태그 #익스프레스",
       Images: [
         {
-          src: "https://unsplash.com/ko/%EC%82%AC%EC%A7%84/%ED%92%80%EB%B0%AD%EC%97%90%EC%9E%88%EB%8A%94-%EA%BD%83-%EB%AC%B4%EB%A6%AC-PzdXE4-0Fls",
+          src: "https://raw.githubusercontent.com/J-SoYoung/node-bird/c19975b02f88bc1cbdd65ab78635ccb1935a51aa/assets/images/cat2.jpg",
         },
         {
-          src: "https://unsplash.com/ko/%EC%82%AC%EC%A7%84/0MCnvnAh_MA",
+          src: "https://raw.githubusercontent.com/J-SoYoung/node-bird/main/assets/images/bg3.jpg",
         },
         {
-          src: "https://unsplash.com/ko/%EC%82%AC%EC%A7%84/%EB%82%AE-%EB%8F%99%EC%95%88%EC%9D%98-%EB%B0%94%EB%8B%A4-IpK3kFBNJzQ",
+          src: "https://gimg.gilbut.co.kr/book/BN001958/rn_view_BN001958.jpg",
         },
       ],
       Comments: [
@@ -38,7 +38,7 @@ export const initialState = {
       contents: "더미데이터입니다",
       Images: [
         {
-          src: "C:Users82106Desktopimgme3.png",
+          src: "https://raw.githubusercontent.com/J-SoYoung/node-bird/main/assets/images/bg3.jpg",
         },
       ],
       Comments: [
