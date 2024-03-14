@@ -1,9 +1,18 @@
+const dummyUser = {
+  id: 1,
+  nickname: "thdud",
+  Posts: [],
+  Followings: [],
+  Followers: [],
+};
+
 export const initialState = {
   isLoggedIn: false,
-  user: null,
+  me: dummyUser,
   signUpData: {},
   loginData: {},
 };
+
 
 // async Action
 
@@ -27,13 +36,13 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         isLoggedIn: true,
-        user: action.data,
+        me: dummyUser,
       };
     case "LOG_OUT":
       return {
         ...state,
         isLoggedIn: false,
-        user: null,
+        me: null,
       };
     default:
       return state;

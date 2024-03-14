@@ -9,16 +9,16 @@ export const initialState = {
       contents: "첫번재 게시글 #해시태그 #익스프레스",
       Images: [
         {
-          src: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fko.wikipedia.org%2Fwiki%2F%25ED%2595%2598%25EC%259D%25B4%25ED%2581%2590!!&psig=AOvVaw0qtYtR-dSp6igIfYgvLl7W&ust=1710371111347000&source=images&cd=vfe&opi=89978449&ved=0CBMQjRxqFwoTCMCL74br74QDFQAAAAAdAAAAABAE",
+          src: "https://unsplash.com/ko/%EC%82%AC%EC%A7%84/%ED%92%80%EB%B0%AD%EC%97%90%EC%9E%88%EB%8A%94-%EA%BD%83-%EB%AC%B4%EB%A6%AC-PzdXE4-0Fls",
         },
         {
-          src: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fserieson.naver.com%2Fv2%2Fbroadcasting%2F401958&psig=AOvVaw0qtYtR-dSp6igIfYgvLl7W&ust=1710371111347000&source=images&cd=vfe&opi=89978449&ved=0CBMQjRxqFwoTCMCL74br74QDFQAAAAAdAAAAABAJ",
+          src: "https://unsplash.com/ko/%EC%82%AC%EC%A7%84/0MCnvnAh_MA",
         },
         {
-          src: "https://www.google.com/search?sca_esv=295fbb2fc4590fb4&sxsrf=ACQVn09ZZBi9uM9vNAOjJF0D8E_aCXOqBw:1710284709228&q=%ED%95%98%EC%9D%B4%ED%81%90&tbm=isch&source=lnms&prmd=ivsnmbz&sa=X&ved=2ahUKEwiarLuE6--EAxXPh68BHbu4C3EQ0pQJegQIEBAB&biw=670&bih=909&dpr=1#imgrc=dbOVFZdY13OhjM",
+          src: "https://unsplash.com/ko/%EC%82%AC%EC%A7%84/%EB%82%AE-%EB%8F%99%EC%95%88%EC%9D%98-%EB%B0%94%EB%8B%A4-IpK3kFBNJzQ",
         },
       ],
-      Comment: [
+      Comments: [
         {
           User: { nickname: "thdud2" },
           contents: "하이큐",
@@ -26,6 +26,33 @@ export const initialState = {
         {
           User: { nickname: "thdud11" },
           contents: "오늘파묘",
+        },
+      ],
+    },
+    {
+      id: 1,
+      User: {
+        id: 1,
+        nickname: "thdud",
+      },
+      contents: "더미데이터입니다",
+      Images: [
+        {
+          src: "https://unsplash.com/ko/%EC%82%AC%EC%A7%84/%ED%92%80%EB%B0%AD%EC%97%90%EC%9E%88%EB%8A%94-%EA%BD%83-%EB%AC%B4%EB%A6%AC-PzdXE4-0Fls",
+        },
+      ],
+      Comments: [
+        {
+          User: { nickname: "thdud333" },
+          contents: "하이큐323",
+        },
+        {
+          User: { nickname: "thdud444" },
+          contents: "오늘파묘33",
+        },
+        {
+          User: { nickname: "thdud444" },
+          contents: "오늘파묘33",
         },
       ],
     },
