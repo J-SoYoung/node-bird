@@ -38,7 +38,7 @@ export const initialState = {
       contents: "더미데이터입니다",
       Images: [
         {
-          src: "https://unsplash.com/ko/%EC%82%AC%EC%A7%84/%ED%92%80%EB%B0%AD%EC%97%90%EC%9E%88%EB%8A%94-%EA%BD%83-%EB%AC%B4%EB%A6%AC-PzdXE4-0Fls",
+          src: "C:Users82106Desktopimgme3.png",
         },
       ],
       Comments: [

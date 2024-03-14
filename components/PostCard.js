@@ -5,13 +5,12 @@ import {
   RetweetOutlined,
   HeartTwoTone,
 } from "@ant-design/icons";
-import { Avatar, Button, Card, Comment, List, Popover } from "antd";
+import { Avatar, Button, Card, Comment,  Popover } from "antd";
 import React, { useCallback, useState } from "react";
 import { useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import PostImages from "./PostImages";
 import CommentForm from "./CommentForm";
-import CommentList from "./CommentList";
 
 const PostCard = ({ post }) => {
   console.log(post.Comments);
@@ -29,6 +28,7 @@ const PostCard = ({ post }) => {
 
   return (
     <div>
+      <img src=""/>
       <Card
         cover={post.Images[0] && <PostImages images={post.Images} />}
         actions={[
@@ -74,21 +74,19 @@ const PostCard = ({ post }) => {
       {commentFormOpen && (
         <div>
           <CommentForm post={post} />
-          <CommentList comments={post.Comments} />
-          <List
-            header={`${post.Comments.length}개의 댓글`}
-            itemLayout="horizontal"
-            dataSource={post.Comments}
-            renderItem={(item) => {
-              <li>
-                <Comment
-                  author={item.User.nickname}
-                  avatar={<Avatar>{item.User.nickname[0]}</Avatar>}
-                  content={item.contents}
-                />
-              </li>;
-            }}
-          />
+          <div>
+            {`${post.Comments.length}개의 댓글`}
+          </div>
+          {post.Comments.map((c, idx) => {
+            return (
+              <Comment
+                key={idx}
+                author={c.User.nickname}
+                avatar={<Avatar>{c.User.nickname[0]}</Avatar>}
+                content={c.contents}
+              />
+            );
+          })}
         </div>
       )}
     </div>
