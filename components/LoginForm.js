@@ -3,8 +3,8 @@ import Link from "next/link";
 import React, { useCallback } from "react";
 import styled from "styled-components";
 import useInput from "../hooks/useInput";
-import { loginAction } from "../reducers/user";
-import { useDispatch } from "react-redux";
+import { loginRequestsAction } from "../reducers/user";
+import { useDispatch, useSelector } from "react-redux";
 
 const ButtonWrapper = styled.div`
   margin-top: 10px;
@@ -16,13 +16,14 @@ const LoginFormWrapper = styled(Form)`
 
 const LoginForm = () => {
   const dispatch = useDispatch();
+  const { isLoggingIn } = useSelector((state) => state.user);
+  console.log("isLoggingIn-", isLoggingIn);
   const [id, onChangeId] = useInput("");
   const [password, onChangePassword] = useInput("");
 
-  
   const onSumbitForm = useCallback(() => {
     console.log(id, password, "로그인");
-    dispatch(loginAction({ id, password }));
+    dispatch(loginRequestsAction({ id, password }));
   }, [id, password]);
 
   return (
@@ -31,19 +32,14 @@ const LoginForm = () => {
         <div>
           <label htmlFor="user-id">아이디</label>
           <br />
-          <Input
-            name="user-id"
-            value={"thdud@aaa.aaa"}
-            onChange={onChangeId}
-            required
-          />
+          <Input name="user-id" value={id} onChange={onChangeId} required />
         </div>
         <div>
           <label htmlFor="user-password">비밀번호</label>
           <br />
           <Input
             name="user-password"
-            value={"thdud"}
+            value={password}
             onChange={onChangePassword}
             required
           />
@@ -53,7 +49,7 @@ const LoginForm = () => {
             type="primary"
             onClick={onSumbitForm}
             htmlType="submit"
-            loading={false}
+            loading={isLoggingIn}
           >
             로그인
           </Button>

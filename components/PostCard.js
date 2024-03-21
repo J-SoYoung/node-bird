@@ -14,7 +14,6 @@ import CommentForm from "./CommentForm";
 import PostCardContent from "./PostCardContent";
 
 const PostCard = ({ post }) => {
-  console.log(post);
   const id = useSelector((state) => state.user.me?.id);
 
   const [liked, setLiked] = useState(false);
