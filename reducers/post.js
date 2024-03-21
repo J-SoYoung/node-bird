@@ -1,3 +1,14 @@
+const dummyPost = {
+  id: 1,
+  contents: "더비더비미더",
+  User: {
+    id: 1,
+    nickname: "thdud",
+  },
+  Image: [],
+  Comments: [],
+};
+
 export const initialState = {
   mainPosts: [
     {
@@ -58,35 +69,86 @@ export const initialState = {
     },
   ],
   imagePaths: [],
-  postAdded: false,
+
+  addPostLoaing: false,
+  addPostDone: false,
+  addPostError: null,
+
+  addCommentLoaing: false,
+  addCommentDone: false,
+  addCommentError: null,
 };
 
-const ADD_POST = "ADD_POST";
+export const ADD_POST_REQUEST = "ADD_POST_REQUEST";
+export const ADD_POST_SUCCESS = "ADD_POST_SUCCESS";
+export const ADD_POST_FAILURE = "ADD_POST_FAILURE";
 
-export const addPost = {
-  type: ADD_POST,
-};
-const dummyPost = {
-  id: 1,
-  contents: "더비더비미더",
-  User: {
-    id: 1,
-    nickname: "thdud",
-  },
-  Image: [],
-  Comments: [],
-};
-// async Action
+export const ADD_COMMENT_REQUEST = "ADD_COMMENT_REQUEST";
+export const ADD_COMMENT_SUCCESS = "ADD_COMMENT_SUCCESS";
+export const ADD_COMMENT_FAILURE = "ADD_COMMENT_FAILURE";
 
-// Action
+export const addPostRequestAction = (data) => {
+  return {
+    type: ADD_POST_REQUEST,
+    data,
+  };
+};
+export const addCommentRequestAction = (data) => {
+  return {
+    type: ADD_COMMENT_REQUEST,
+    data,
+  };
+};
 
 // reducer
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case "ADD_POST": {
+    case ADD_POST_REQUEST: {
       return {
         ...state,
-        mainPosts: [dummyPost, ...state.mainPosts],
+        addPostLoaing: true,
+        addPostDone: false,
+        addPostError: null,
+      };
+    }
+    case ADD_POST_SUCCESS: {
+      return {
+        ...state,
+        mainPosts: [action.data, ...state.mainPosts],
+        addPostLoaing: false,
+        addPostDone: true,
+      };
+    }
+    case ADD_POST_FAILURE: {
+      return {
+        ...state,
+        addPostLoaing: false,
+        addPostDone: false,
+        addPostError: action.error,
+      };
+    }
+    case ADD_COMMENT_REQUEST: {
+      return {
+        ...state,
+        addCommentLoaing: true,
+        addCommentDone: false,
+        addCommentError: null,
+      };
+    }
+    case ADD_COMMENT_SUCCESS: {
+      return {
+        ...state,
+        mainPosts: [action.data, ...state.mainPosts],
+        addCommentLoaing: false,
+        addCommentDone: true,
+      };
+    }
+    case ADD_COMMENT_FAILURE: {
+      return {
+        ...state,
+        addCommentLoaing: false,
+        addCommentDone: false,
+        addCommentError: action.error,
       };
     }
     default:

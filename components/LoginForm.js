@@ -16,28 +16,37 @@ const LoginFormWrapper = styled(Form)`
 
 const LoginForm = () => {
   const dispatch = useDispatch();
-  const { isLoggingIn } = useSelector((state) => state.user);
-  console.log("isLoggingIn-", isLoggingIn);
-  const [id, onChangeId] = useInput("");
-  const [password, onChangePassword] = useInput("");
+  const { loginLoading } = useSelector((state) => state.user);
+
+  const [email, onChangeEmail, resetEmail] = useInput("");
+  const [password, onChangePassword, resetPassword] = useInput("");
 
   const onSumbitForm = useCallback(() => {
-    console.log(id, password, "로그인");
-    dispatch(loginRequestsAction({ id, password }));
-  }, [id, password]);
+    console.log(email, password, "로그인");
+    dispatch(loginRequestsAction({ email, password }));
+    resetEmail();
+    resetPassword();
+  }, [email, password]);
 
   return (
     <>
       <LoginFormWrapper>
         <div>
-          <label htmlFor="user-id">아이디</label>
+          <label htmlFor="user-email">이메일</label>
           <br />
-          <Input name="user-id" value={id} onChange={onChangeId} required />
+          <Input
+            type="text"
+            name="user-email"
+            value={email}
+            onChange={onChangeEmail}
+            required
+          />
         </div>
         <div>
           <label htmlFor="user-password">비밀번호</label>
           <br />
           <Input
+            type="password"
             name="user-password"
             value={password}
             onChange={onChangePassword}
@@ -49,7 +58,7 @@ const LoginForm = () => {
             type="primary"
             onClick={onSumbitForm}
             htmlType="submit"
-            loading={isLoggingIn}
+            loading={loginLoading}
           >
             로그인
           </Button>

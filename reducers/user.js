@@ -1,15 +1,25 @@
-const dummyUser = {
+const dummyUser = (data) => ({
+  ...data,
   id: 1,
   nickname: "thdud",
   Posts: [],
   Followings: [],
   Followers: [],
-};
+});
 
 export const initialState = {
-  isLoggedIn: false,
-  isLoggingIn: false, // 로그인 시도중 (로딩창을 위함)
-  isLoggingOut: false, // 로그아웃 시도중
+  loginLoading: false,
+  loginDone: false,
+  loginError: null,
+
+  logOutLoading: false,
+  logOutDone: false,
+  logOutError: null,
+
+  signUpLoading: false,
+  signUpDone: false,
+  signUpError: null,
+
   me: null,
   signUpData: {},
   loginData: {},
@@ -18,26 +28,30 @@ export const initialState = {
 // async Action
 
 // Action
-export const SIGN_UP = "SIGN_UP";
+export const SIGN_UP_REQUEST = "SIGN_UP_REQUEST";
 export const SIGN_UP_SUCCESS = "SIGN_UP_SUCCESS";
+export const SIGN_UP_FAILURE = "SIGN_UP_FAILURE";
 
 export const LOG_IN_REQUEST = "LOG_IN_REQUEST";
 export const LOG_IN_SUCCESS = "LOG_IN_SUCCESS";
 export const LOG_IN_FAILURE = "LOG_IN_FAILURE";
+
 export const LOG_OUT_REQUEST = "LOG_OUT_REQUEST";
 export const LOG_OUT_SUCCESS = "LOG_OUT_SUCCESS";
 export const LOG_OUT_FAILURE = "LOG_OUT_FAILURE";
 
-export const signUpAction = (data) => {
-  return {
-    type: SIGN_UP,
-    data,
-  };
-};
+export const FOLLOW_REQUEST = "FOLLOW_REQUEST";
+export const FOLLOW_SUCCESS = "FOLLOW_SUCCESS";
+export const FOLLOW_FAILURE = "FOLLOW_FAILURE";
 
-export const signUpSuccess = () => {
+export const UNFOLLOW_REQUEST = "UNFOLLOW_REQUEST";
+export const UNFOLLOW_SUCCESS = "UNFOLLOW_SUCCESS";
+export const UNFOLLOW_FAILURE = "UNFOLLOW_FAILURE";
+
+export const signRequestsUpAction = (data) => {
   return {
-    type: SIGN_UP_SUCCESS,
+    type: SIGN_UP_REQUEST,
+    data,
   };
 };
 
@@ -53,73 +67,81 @@ export const logoutRequestsAction = () => {
   return { type: LOG_OUT_REQUEST };
 };
 
-export const signUp = (data) => {
-  return {
-    type: SIGN_UP,
-    data,
-  };
-};
-
 // reducer : (이전 상태, 액션) => 다음 상태
 export default (state = initialState, action) => {
   switch (action.type) {
     case LOG_IN_REQUEST: {
-      console.log("login-reeucer", action);
       return {
         ...state,
-        isLoggingIn: true,
+        loginLoading: true,
+        loginDone: false,
+        loginError: null,
       };
     }
     case LOG_IN_SUCCESS: {
-      console.log("login-suc-reducer");
       return {
         ...state,
-        isLoggingIn: false,
-        isLoggedIn: true,
-        me: { ...action.data, nickname: "thdud" },
+        loginLoading: false,
+        loginDone: true,
+        me: dummyUser(action.data),
       };
     }
     case LOG_IN_FAILURE: {
-      console.log("login-fail-reducer");
-
       return {
         ...state,
-        isLoggingIn: false,
-        isLoggedIn: false,
-        me: null,
-        loginData: null,
+        loginLoading: false,
+        loginError: action.error,
       };
     }
 
     case LOG_OUT_REQUEST: {
       return {
         ...state,
-        isLoggingOut: true,
+        logOutLoading: true,
+        logOutDone: false,
+        logOutError: null,
       };
     }
     case LOG_OUT_SUCCESS: {
       return {
         ...state,
-        isLoggingOut: false,
-        isLoggedIn: false,
+        logOutLoading: false,
+        logOutDone: true,
         me: null,
       };
     }
     case LOG_OUT_FAILURE: {
       return {
         ...state,
-        isLoggingOut: false,
-        isLoggedIn: true,
-        me: { ...state.me },
+        logOutLoading: false,
+        logOutError: action.error,
       };
     }
 
-    case SIGN_UP: {
+    case SIGN_UP_REQUEST: {
       return {
         ...state,
+        signUpLoading: true,
+        signUpDone: false,
+        signUpError: null,
+      };
+    }
+    case SIGN_UP_SUCCESS: {
+      return {
+        ...state,
+        signUpLoading: false,
+        signUpDone: true,
         signUpData: action.data,
       };
     }
+    case SIGN_UP_FAILURE: {
+      return {
+        ...state,
+        signUpLoading: false,
+        signUpError: action.error,
+      };
+    }
+
     default: {
       return {
         ...state,

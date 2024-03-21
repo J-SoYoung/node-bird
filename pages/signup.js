@@ -4,15 +4,20 @@ import Head from "next/head";
 import AppLayout from "../components/AppLayout";
 import { Form, Input, Checkbox, Button } from "antd";
 import styled from "styled-components";
+import { useDispatch, useSelector } from "react-redux";
+import { SIGN_UP_REQUEST } from "../reducers/user";
 
 const ErrorMessage = styled.div`
   color: red;
 `;
 
 const Signup = () => {
-  const [id, onChangeId] = useInput("");
-  const [nickname, onChangeNickname] = useInput("");
-  const [password, onChangePassword] = useInput("");
+  const dispatch = useDispatch();
+  const { signUpLoading } = useSelector((state) => state.user);
+
+  const [email, onChangeEmail, resetEmail] = useInput("");
+  const [nickname, onChangeNickname, resetNickname] = useInput("");
+  const [password, onChangePassword, resetPassword] = useInput("");
 
   const [passwordCheck, setPasswordCheck] = useState("");
   const [passwordError, setPasswordError] = useState(false);
@@ -33,8 +38,17 @@ const Signup = () => {
   const onSumbit = useCallback(() => {
     if (password !== passwordCheck) return setPasswordError(true);
     if (!term) return setTermError(true);
-    console.log(id, nickname, password, term);
-  }, [password, passwordCheck, term]);
+    console.log(email, nickname, password, term);
+
+    dispatch({
+      type: SIGN_UP_REQUEST,
+      data: { email, nickname, password },
+    });
+
+    resetEmail();
+    resetNickname();
+    resetPassword();
+  }, [email, password, passwordCheck, term]);
 
   return (
     <AppLayout>
@@ -43,14 +57,21 @@ const Signup = () => {
       </Head>
       <Form onFinish={onSumbit}>
         <div>
-          <label htmlFor="user-id">아이디</label>
+          <label htmlFor="user-email">이메일</label>
           <br />
-          <Input name="user-id" value={id} onChange={onChangeId} required />
+          <Input
+            type="email"
+            name="user-email"
+            value={email}
+            onChange={onChangeEmail}
+            required
+          />
         </div>
         <div>
           <label htmlFor="user-nickname">닉네임</label>
           <br />
           <Input
+            type="text"
             name="user-nickname"
             value={nickname}
             onChange={onChangeNickname}
@@ -94,6 +115,7 @@ const Signup = () => {
           <Button
             type="primary"
             htmlType="submit"
+            loading={signUpLoading}
             style={{ margin: "20px 0" }}
           >
             가입하기
