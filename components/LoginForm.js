@@ -1,6 +1,6 @@
 import { Button, Form, Input } from "antd";
 import Link from "next/link";
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import styled from "styled-components";
 import useInput from "../hooks/useInput";
 import { loginRequestsAction } from "../reducers/user";
@@ -16,7 +16,15 @@ const LoginFormWrapper = styled(Form)`
 
 const LoginForm = () => {
   const dispatch = useDispatch();
-  const { loginLoading } = useSelector((state) => state.user);
+  const { loginLoading, loginDone, me } = useSelector((state) => state.user);
+  console.log(loginLoading, loginDone, me);
+
+  useEffect(() => {
+    if (loginDone) {
+      resetEmail();
+      resetPassword();
+    }
+  }, [loginDone]);
 
   const [email, onChangeEmail, resetEmail] = useInput("");
   const [password, onChangePassword, resetPassword] = useInput("");
@@ -24,8 +32,6 @@ const LoginForm = () => {
   const onSumbitForm = useCallback(() => {
     console.log(email, password, "로그인");
     dispatch(loginRequestsAction({ email, password }));
-    resetEmail();
-    resetPassword();
   }, [email, password]);
 
   return (
@@ -35,7 +41,7 @@ const LoginForm = () => {
           <label htmlFor="user-email">이메일</label>
           <br />
           <Input
-            type="text"
+            type="email"
             name="user-email"
             value={email}
             onChange={onChangeEmail}

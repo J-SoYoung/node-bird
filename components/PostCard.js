@@ -7,14 +7,17 @@ import {
 } from "@ant-design/icons";
 import { Avatar, Button, Card, Comment, Popover } from "antd";
 import React, { useCallback, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import PostImages from "./PostImages";
 import CommentForm from "./CommentForm";
 import PostCardContent from "./PostCardContent";
+import { REMOVE_POST_REQUEST } from "../reducers/post";
 
 const PostCard = ({ post }) => {
+  const dispatch = useDispatch();
   const id = useSelector((state) => state.user.me?.id);
+  const {removePostLoaing} = useSelector((state)=> state.post)
 
   const [liked, setLiked] = useState(false);
   const onToggleLike = useCallback(() => {
@@ -26,10 +29,17 @@ const PostCard = ({ post }) => {
     setCommentFormOpen((prev) => !prev);
   }, []);
 
+  const onRemovePost = useCallback(() => {
+    dispatch({
+      type: REMOVE_POST_REQUEST,
+      data: post.id,
+    });
+  }, []);
+
   return (
     <div>
       <Card
-        cover={post.Images[0] && <PostImages images={post.Images} />}
+        cover={post.Images && <PostImages images={post.Images} />}
         actions={[
           <RetweetOutlined key="retweet" />,
           liked ? (
@@ -47,10 +57,15 @@ const PostCard = ({ post }) => {
             key="more"
             content={
               <Button.Group>
-                {id && post.User.id === id ? (
+                {id && Number(id) === Number(post?.User?.id) ? (
                   <>
                     <Button>수정</Button>
-                    <Button type="danger">삭제</Button>
+                    <Button 
+                    type="danger"
+                    loading={removePostLoaing} 
+                    onClick={onRemovePost}>
+                      삭제
+                    </Button>
                   </>
                 ) : (
                   <Button>신고</Button>
@@ -65,8 +80,8 @@ const PostCard = ({ post }) => {
         {/* <Image /> */}
         {/* <Content /> */}
         <Card.Meta
-          avatar={<Avatar>{post.User.nickname[0]}</Avatar>}
-          title={post.User.nickname}
+          avatar={<Avatar>{post.User?.nickname[0]}</Avatar>}
+          title={post.User?.nickname}
           description={
             <PostCardContent postData={post.contents}></PostCardContent>
           }
