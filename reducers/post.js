@@ -1,3 +1,4 @@
+import { produce } from "immer";
 import shortid from "shortid";
 
 const dummyComment = (data) => ({
@@ -127,93 +128,76 @@ export const addCommentRequestAction = (data) => {
 
 // reducer
 const reducer = (state = initialState, action) => {
-  switch (action.type) {
-    case ADD_POST_REQUEST: {
-      return {
-        ...state,
-        addPostLoaing: true,
-        addPostDone: false,
-        addPostError: null,
-      };
-    }
-    case ADD_POST_SUCCESS: {
-      console.log("action-data,일단dummy", action.data);
-      return {
-        ...state,
-        mainPosts: [dummyPost(action.data), ...state.mainPosts],
-        addPostLoaing: false,
-        addPostDone: true,
-      };
-    }
-    case ADD_POST_FAILURE: {
-      return {
-        ...state,
-        addPostLoaing: false,
-        addPostDone: false,
-        addPostError: action.error,
-      };
-    }
+  return produce(state, (draft) => {
+    switch (action.type) {
+      case ADD_POST_REQUEST: {
+        draft.addPostLoaing = true;
+        draft.addPostDone = false;
+        draft.addPostError = null;
+        break;
+      }
+      case ADD_POST_SUCCESS: {
+        draft.mainPosts.unshift(dummyPost(action.data));
+        draft.addPostLoaing = false;
+        draft.addPostDone = true;
+        break;
+      }
+      case ADD_POST_FAILURE: {
+        draft.addPostLoaing = false;
+        draft.addPostDone = false;
+        draft.addPostError = action.error;
+        break;
+      }
 
-    case REMOVE_POST_REQUEST: {
-      return {
-        ...state,
-        removePostLoaing: true,
-        removePostDone: false,
-        removePostError: null,
-      };
-    }
-    case REMOVE_POST_SUCCESS: {
-      return {
-        ...state,
-        mainPosts: state.mainPosts.filter((v)=> v.id !== action.data),
-        removePostLoaing: false,
-        removePostDone: true,
-      };
-    }
-    case REMOVE_POST_FAILURE: {
-      return {
-        ...state,
-        removePostLoaing: false,
-        removePostDone: false,
-        removePostError: action.error,
-      };
-    }
+      case REMOVE_POST_REQUEST: {
+        draft.removePostLoaing = true;
+        draft.removePostDone = false;
+        draft.removePostError = null;
+        break;
+      }
+      case REMOVE_POST_SUCCESS: {
+        draft.removePostLoaing = false;
+        draft.removePostDone = true;
+        draft.mainPosts = state.mainPosts.filter((v) => v.id !== action.data);
+        break;
+      }
+      case REMOVE_POST_FAILURE: {
+        draft.removePostLoaing = false;
+        draft.removePostError = action.error;
+        break;
+      }
 
-    case ADD_COMMENT_REQUEST: {
-      return {
-        ...state,
-        addCommentLoaing: true,
-        addCommentDone: false,
-        addCommentError: null,
-      };
-    }
-    case ADD_COMMENT_SUCCESS: {
-      const postIndex = state.mainPosts.findIndex(
-        (v) => v.id === action.data.postId
-      );
-      const post = state.mainPosts[postIndex];
-      const Comments = [dummyComment(action.data.content), ...post.Comments];
-      const mainPosts = [...state.mainPosts];
-      mainPosts[postIndex] = { ...post, Comments };
+      case ADD_COMMENT_REQUEST: {
+        draft.addCommentLoaing = true;
+        draft.addCommentDone = false;
+        draft.addCommentError = null;
+        break;
+      }
+      case ADD_COMMENT_SUCCESS: {
+        const post = draft.mainPosts.find((v) => v.id === action.data.postId);
+        post.Comments.unshift(dummyComment(action.data.content));
+        draft.addCommentLoaing = false;
+        draft.addCommentDone = true;
+        break;
 
-      return {
-        ...state,
-        mainPosts: [...mainPosts],
-        addCommentLoaing: false,
-        addCommentDone: true,
-      };
+        // const postIndex = state.mainPosts.findIndex(
+        //   (v) => v.id === action.data.postId
+        // );
+        // const post = state.mainPosts[postIndex];
+        // const Comments = [dummyComment(action.data.content), ...post.Comments];
+        // const mainPosts = [draft.mainPosts];
+        // mainPosts[postIndex] = { ...post, Comments };
+        // draft.mainPosts = [...mainPosts];
+      }
+      case ADD_COMMENT_FAILURE: {
+        draft.addCommentLoaing = false;
+        draft.addCommentError = action.error;
+        break;
+      }
+      default:
+        break;
     }
-    case ADD_COMMENT_FAILURE: {
-      return {
-        ...state,
-        addCommentLoaing: false,
-        addCommentDone: false,
-        addCommentError: action.error,
-      };
-    }
-    default:
-      return state;
-  }
+  });
 };
 
 export default reducer;

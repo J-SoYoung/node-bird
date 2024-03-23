@@ -15,6 +15,7 @@
     "antd": "^4.24.15",
     "axios": "^1.6.8",
     "eslint-scope": "^8.0.0",
+    "immer": "^10.0.4",
     "next": "^13.5.6",
     "next-redux-saga": "^4.1.2",
     "next-redux-wrapper": "^6.0.2",
