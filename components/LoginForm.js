@@ -77,8 +77,3 @@ const LoginForm = () => {
 };
 
 export default LoginForm;
-
-// 어떤 타입을 써야 하나?
-// LoginForm.propTypes = {
-//   setIsLoggedIn: PropTypes.string.isRequired,
-// };

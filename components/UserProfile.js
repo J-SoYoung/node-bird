@@ -25,21 +25,21 @@ const UserProfile = () => {
         }
         actions={[
           <div key="twit">
-            포스트 <br /> {me.Posts.length}
+            포스트 <br /> {me?.Posts.length}
           </div>,
           <div key="followings">
             팔로잉 <br />
-            {me.Followings.length}
+            {me?.Followings.length}
           </div>,
           <div key="follower">
             팔로우 <br />
-            {me.Followers.length}
+            {me?.Followers.length}
           </div>,
         ]}
       >
         <Card.Meta
-          avatar={<Avatar>{me.nickname[0]}</Avatar>}
-          title={me.nickname}
+          avatar={<Avatar>{me?.nickname[0]}</Avatar>}
+          title={me?.nickname}
         />
       </Card>
       <Button onClick={onLogOut} loading={logOutLoading}>
