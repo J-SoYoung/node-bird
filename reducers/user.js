@@ -6,7 +6,10 @@ const dummyUser = (data) => {
     id: 1,
     nickname: "thdud",
     Posts: [],
-    Followings: [{ nickname: "SoYoung" }, { nickname: "ToYoung" }],
+    Followings: [
+      { nickname: "SoYoung", id: 1 },
+      { nickname: "ToYoung", id: 2 },
+    ],
     Followers: [
       { nickname: "SoSoung" },
       { nickname: "YoYoung" },
@@ -27,6 +30,14 @@ export const initialState = {
   signUpLoading: false, // 회원가입 시도중
   signUpDone: false,
   signUpError: null,
+
+  followLoading: false, // 팔로우 시도중
+  followDone: false,
+  followError: null,
+
+  unFollowLoading: false, // 언팔로우 시도중
+  unFollowDone: false,
+  unFollowError: null,
 
   changeNicknameLoading: false, // 닉네임 변경 시도중
   changeNicknameDone: false,
@@ -56,13 +67,13 @@ export const FOLLOW_REQUEST = "FOLLOW_REQUEST";
 export const FOLLOW_SUCCESS = "FOLLOW_SUCCESS";
 export const FOLLOW_FAILURE = "FOLLOW_FAILURE";
 
-export const CHANGE_NICKNAME_REQUEST = "CHANGE_NICKNAME_REQUEST";
-export const CHANGE_NICKNAME_SUCCESS = "CHANGE_NICKNAME_SUCCESS";
-export const CHANGE_NICKNAME_FAILURE = "CHANGE_NICKNAME_FAILURE";
-
 export const UNFOLLOW_REQUEST = "UNFOLLOW_REQUEST";
 export const UNFOLLOW_SUCCESS = "UNFOLLOW_SUCCESS";
 export const UNFOLLOW_FAILURE = "UNFOLLOW_FAILURE";
+
+export const CHANGE_NICKNAME_REQUEST = "CHANGE_NICKNAME_REQUEST";
+export const CHANGE_NICKNAME_SUCCESS = "CHANGE_NICKNAME_SUCCESS";
+export const CHANGE_NICKNAME_FAILURE = "CHANGE_NICKNAME_FAILURE";
 
 export const ADD_POST_TO_ME = "ADD_POST_TO_ME";
 export const REMOVE_POST_OF_ME = "REMOVE_POST_OF_ME";
@@ -103,6 +114,7 @@ const reducer = (state = initialState, action) => {
       }
       case LOG_IN_FAILURE: {
         draft.loginLoading = false;
+        draft.loginDone = false;
         draft.loginError = action.error;
         break;
       }
@@ -121,6 +133,7 @@ const reducer = (state = initialState, action) => {
       }
       case LOG_OUT_FAILURE: {
         draft.logOutLoading = false;
+        draft.loginDone = false;
         draft.logOutError = action.error;
         break;
       }
@@ -157,6 +170,7 @@ const reducer = (state = initialState, action) => {
       }
       case CHANGE_NICKNAME_FAILURE: {
         draft.changeNicknameLoading = false;
+        draft.changeNicknameDone = false;
         draft.changeNicknameError = action.error;
         break;
       }
@@ -183,6 +197,50 @@ const reducer = (state = initialState, action) => {
         //     Posts: state.me.Posts.filter((v) => v.id !== action.data),
         //   },
         // };
+      }
+
+      case FOLLOW_REQUEST: {
+        console.log("follow-reducer요청");
+        draft.followLoading = true;
+        draft.followDone = false;
+        draft.followError = null;
+        break;
+      }
+      case FOLLOW_SUCCESS: {
+        console.log("follow-reducer 성공", action.data);
+        draft.followLoading = false;
+        draft.me.Followings.push(action.data);
+        draft.followDone = true;
+        break;
+      }
+      case FOLLOW_FAILURE: {
+        draft.followLoading = false;
+        draft.followDone = false;
+        draft.followError = action.error;
+        break;
+      }
+
+      case UNFOLLOW_REQUEST: {
+        console.log("unfollow-reducer 요청");
+        draft.unFollowLoading = true;
+        draft.unFollowDone = false;
+        draft.unFollowError = null;
+        break;
+      }
+      case UNFOLLOW_SUCCESS: {
+        console.log("unfollow-reducer 성공", action.data);
+        draft.unFollowLoading = false;
+        draft.me.Followings = draft.me.Followings.filter(
+          (f) => f.id !== action.data.id
+        );
+        draft.unFollowDone = true;
+        break;
+      }
+      case UNFOLLOW_FAILURE: {
+        draft.unFollowLoading = false;
+        draft.unFollowDone = false;
+        draft.unFollowError = action.error;
+        break;
       }
 
       default: {

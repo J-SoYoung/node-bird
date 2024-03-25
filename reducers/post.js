@@ -3,74 +3,74 @@ import shortid from "shortid";
 import { faker } from "@faker-js/faker";
 
 export let initialState = {
-  mainPosts: [],
-  // mainPosts: [
-  //   {
-  //     id: 1,
-  //     User: {
-  //       id: 1,
-  //       nickname: "thdud",
-  //     },
-  //     contents: "첫번재 게시글 #해시태그 #익스프레스",
-  //     Images: [
-  //       {
-  //         id: shortid.generate(),
-  //         src: "https://raw.githubusercontent.com/J-SoYoung/node-bird/c19975b02f88bc1cbdd65ab78635ccb1935a51aa/assets/images/cat2.jpg",
-  //       },
-  //       {
-  //         id: shortid.generate(),
-  //         src: "https://raw.githubusercontent.com/J-SoYoung/node-bird/main/assets/images/bg3.jpg",
-  //       },
-  //       {
-  //         id: shortid.generate(),
-  //         src: "https://gimg.gilbut.co.kr/book/BN001958/rn_view_BN001958.jpg",
-  //       },
-  //     ],
-  //     Comments: [
-  //       {
-  //         id: shortid.generate(),
-  //         User: { id: shortid.generate(), nickname: "thdud2" },
-  //         contents: "하이큐",
-  //       },
-  //       {
-  //         id: shortid.generate(),
-  //         User: { id: shortid.generate(), nickname: "thdud11" },
-  //         contents: "오늘파묘",
-  //       },
-  //     ],
-  //   },
-  //   {
-  //     id: 2,
-  //     User: {
-  //       id: 1,
-  //       nickname: "thdud",
-  //     },
-  //     contents: "더미데이터입니다",
-  //     Images: [
-  //       {
-  //         id: shortid.generate(),
-  //         src: "https://raw.githubusercontent.com/J-SoYoung/node-bird/main/assets/images/bg3.jpg",
-  //       },
-  //     ],
-  //     Comments: [
-  //       {
-  //         id: shortid.generate(),
-  //         User: { id: shortid.generate(), nickname: "thdud333" },
-  //         contents: "하이큐323",
-  //       },
-  //       {
-  //         id: shortid.generate(),
-  //         User: { id: shortid.generate(), nickname: "thdud444" },
-  //         contents: "오늘파묘33",
-  //       },
-  //       {
-  //         id: shortid.generate(),
-  //         User: { id: shortid.generate(), nickname: "thdud444" },
-  //         contents: "오늘파묘33",
-  //       },
-  //     ],
-  //   },
-  // ],
+  // mainPosts: [],
+  mainPosts: [
+    {
+      id: 1,
+      User: {
+        id: 1,
+        nickname: "thdud",
+      },
+      contents: "첫번재 게시글 #해시태그 #익스프레스",
+      Images: [
+        {
+          id: shortid.generate(),
+          src: "https://raw.githubusercontent.com/J-SoYoung/node-bird/c19975b02f88bc1cbdd65ab78635ccb1935a51aa/assets/images/cat2.jpg",
+        },
+        {
+          id: shortid.generate(),
+          src: "https://raw.githubusercontent.com/J-SoYoung/node-bird/main/assets/images/bg3.jpg",
+        },
+        {
+          id: shortid.generate(),
+          src: "https://gimg.gilbut.co.kr/book/BN001958/rn_view_BN001958.jpg",
+        },
+      ],
+      Comments: [
+        {
+          id: shortid.generate(),
+          User: { id: shortid.generate(), nickname: "thdud2" },
+          contents: "하이큐",
+        },
+        {
+          id: shortid.generate(),
+          User: { id: shortid.generate(), nickname: "thdud11" },
+          contents: "오늘파묘",
+        },
+      ],
+    },
+    {
+      id: 2,
+      User: {
+        id: 1,
+        nickname: "thdud",
+      },
+      contents: "더미데이터입니다",
+      Images: [
+        {
+          id: shortid.generate(),
+          src: "https://raw.githubusercontent.com/J-SoYoung/node-bird/main/assets/images/bg3.jpg",
+        },
+      ],
+      Comments: [
+        {
+          id: shortid.generate(),
+          User: { id: shortid.generate(), nickname: "thdud333" },
+          contents: "하이큐323",
+        },
+        {
+          id: shortid.generate(),
+          User: { id: shortid.generate(), nickname: "thdud444" },
+          contents: "오늘파묘33",
+        },
+        {
+          id: shortid.generate(),
+          User: { id: shortid.generate(), nickname: "thdud444" },
+          contents: "오늘파묘33",
+        },
+      ],
+    },
+  ],
   imagePaths: [],
   hasMorePost: true,
 
@@ -185,7 +185,7 @@ const reducer = (state = initialState, action) => {
         draft.LoadPostsLoaing = false;
         draft.LoadPostsDone = true;
         draft.mainPosts.push(...action.data);
-        draft.hasMorePost = draft.mainPosts.length < 70;
+        draft.hasMorePost = draft.mainPosts.length < 10;
         break;
       }
       case LOAD_POSTS_FAILURE: {
