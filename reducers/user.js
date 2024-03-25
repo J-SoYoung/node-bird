@@ -75,7 +75,6 @@ export const signRequestsUpAction = (data) => {
 };
 
 export const loginRequestsAction = (data) => {
-  console.log("redux-login-request action");
   return {
     type: LOG_IN_REQUEST,
     data,

@@ -24,9 +24,8 @@ const Home = () => {
       const userScroll = window.scrollY;
       const clientHeight = document.documentElement.clientHeight;
       const scrollHeight = document.documentElement.scrollHeight;
-      console.log();
-      if (userScroll + clientHeight > scrollHeight - 300) {
-        console.log("다암");
+
+      if (userScroll + clientHeight === scrollHeight - 300) {
         if (hasMorePost && !LoadPostsLoaing) {
           dispatch({
             type: LOAD_POSTS_REQUEST,

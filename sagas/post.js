@@ -25,7 +25,6 @@ function* addComment(action) {
   try {
     yield delay(1000);
     // const result = yield call(addCommentAPI);
-    console.log("saga-conmment", action.data);
     yield put({
       type: ADD_COMMENT_SUCCESS,
       data: action.data,
@@ -42,7 +41,6 @@ function addPostAPI() {
   return axios.post("/api/post");
 }
 function* addPost(action) {
-  console.log("saga-post", action);
   const id = shortid.generate();
 
   try {

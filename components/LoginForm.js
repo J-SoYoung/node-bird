@@ -17,7 +17,6 @@ const LoginFormWrapper = styled(Form)`
 const LoginForm = () => {
   const dispatch = useDispatch();
   const { loginLoading, loginDone, me } = useSelector((state) => state.user);
-  console.log(loginLoading, loginDone, me);
 
   useEffect(() => {
     if (loginDone) {

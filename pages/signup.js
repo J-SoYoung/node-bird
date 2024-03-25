@@ -38,7 +38,7 @@ const Signup = () => {
   const onSumbit = useCallback(() => {
     if (password !== passwordCheck) return setPasswordError(true);
     if (!term) return setTermError(true);
-    console.log(email, nickname, password, term);
+    console.log('회원가입',email, nickname, password, term);
 
     dispatch({
       type: SIGN_UP_REQUEST,

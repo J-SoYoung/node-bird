@@ -142,7 +142,6 @@ export const ADD_COMMENT_SUCCESS = "ADD_COMMENT_SUCCESS";
 export const ADD_COMMENT_FAILURE = "ADD_COMMENT_FAILURE";
 
 export const addPostRequestAction = (data) => {
-  console.log(data);
   return {
     type: ADD_POST_REQUEST,
     data,
@@ -182,7 +181,6 @@ const reducer = (state = initialState, action) => {
         break;
       }
       case LOAD_POSTS_SUCCESS: {
-        console.log("ddd reducer", action.data);
         draft.LoadPostsLoaing = false;
         draft.LoadPostsDone = true;
         draft.mainPosts = action.data.concat(draft.mainPosts);

@@ -21,7 +21,6 @@ const CommentForm = ({ post }) => {
 
   const [commentText, onChangeCommentText, resetComment] = useInput("");
   const onSubmitComment = useCallback(() => {
-    console.log("안찍힘?", id, post.id, commentText);
 
     dispatch({
       type: ADD_COMMENT_REQUEST,
