@@ -108,7 +108,7 @@ function* loadPosts(action) {
     // const result = yield call(loadPostsAPI);
     yield put({
       type: LOAD_POSTS_SUCCESS,
-      data: generateDummyPost(3),
+      data: generateDummyPost(10),
     });
   } catch (error) {
     console.log(error);
