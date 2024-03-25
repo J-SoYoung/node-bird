@@ -11,7 +11,7 @@ const Home = () => {
   const { mainPosts, hasMorePost, LoadPostsLoaing } = useSelector(
     (state) => state.post
   );
-  console.log("main post-", mainPosts);
+
 
   useEffect(() => {
     dispatch({
@@ -24,12 +24,14 @@ const Home = () => {
       const userScroll = window.scrollY;
       const clientHeight = document.documentElement.clientHeight;
       const scrollHeight = document.documentElement.scrollHeight;
+      // console.log(userScroll + clientHeight, scrollHeight - 300);
+      // console.log("LoadPostsLoaing", LoadPostsLoaing);
 
-      if (userScroll + clientHeight === scrollHeight - 300) {
+      if (userScroll + clientHeight > scrollHeight - 300) {
         if (hasMorePost && !LoadPostsLoaing) {
           dispatch({
             type: LOAD_POSTS_REQUEST,
-            data: mainPosts[mainPosts.length - 1].id,
+            // data: mainPosts[mainPosts.length - 1].id,
           });
         }
       }

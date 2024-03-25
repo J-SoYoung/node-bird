@@ -94,33 +94,33 @@ export let initialState = {
 export const generateDummyPost = (number) =>
   Array(number)
     .fill()
-    .map(() => ({
-      id: shortid.generate(),
-      User: {
-        id: shortid.generate(),
-        nickname: "thdud",
-      },
-      contents: "ddddd",
-      Image: [],
-      Comments: [],
+    .map((p, idx) => ({
       // id: shortid.generate(),
       // User: {
       //   id: shortid.generate(),
-      //   nickname: faker.person.fullName(),
+      //   nickname: "thdud",
       // },
-      // contents: faker.lorem.paragraph(),
-      // Images: [
-      //   {
-      //     src: faker.image.url(),
-      //   },
-      // ],
-      // Comments: [
-      //   {
-      //     id: shortid.generate(),
-      //     User: { id: shortid.generate(), nickname: faker.person.fullName() },
-      //     contents: faker.lorem.sentence(),
-      //   },
-      // ],
+      // contents: `dddd-${idx}`,
+      // Image: [],
+      // Comments: [],
+      id: shortid.generate(),
+      User: {
+        id: shortid.generate(),
+        nickname: faker.person.fullName(),
+      },
+      contents: faker.lorem.paragraph(),
+      Images: [
+        {
+          src: faker.image.url(),
+        },
+      ],
+      Comments: [
+        {
+          id: shortid.generate(),
+          User: { id: shortid.generate(), nickname: faker.person.fullName() },
+          contents: faker.lorem.sentence(),
+        },
+      ],
     }));
 
 // initialState.mainPosts = initialState.mainPosts.concat(generateDummyPost(10));
@@ -181,10 +181,11 @@ const reducer = (state = initialState, action) => {
         break;
       }
       case LOAD_POSTS_SUCCESS: {
+        console.log("reducer post-", action.data);
         draft.LoadPostsLoaing = false;
         draft.LoadPostsDone = true;
-        draft.mainPosts = action.data.concat(draft.mainPosts);
-        draft.hasMorePost = draft.mainPosts.length < 50;
+        draft.mainPosts.push(...action.data);
+        draft.hasMorePost = draft.mainPosts.length < 70;
         break;
       }
       case LOAD_POSTS_FAILURE: {
