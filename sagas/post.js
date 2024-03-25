@@ -10,6 +10,10 @@ import {
   REMOVE_POST_REQUEST,
   REMOVE_POST_SUCCESS,
   REMOVE_POST_FAILURE,
+  LOAD_POSTS_REQUEST,
+  LOAD_POSTS_SUCCESS,
+  LOAD_POSTS_FAILURE,
+  generateDummyPost,
 } from "../reducers/post";
 import { ADD_POST_TO_ME, REMOVE_POST_OF_ME } from "../reducers/user";
 import shortid from "shortid";
@@ -90,6 +94,29 @@ function* removePost(action) {
   }
 }
 
+function loadPostsAPI(data) {
+  return axios.get("/api/posts", data);
+}
+function* loadPosts(action) {
+  try {
+    yield delay(1000);
+    // const result = yield call(loadPostsAPI);
+    yield put({
+      type: LOAD_POSTS_SUCCESS,
+      data: generateDummyPost(10),
+    });
+  } catch (error) {
+    console.log(error);
+    yield put({
+      type: LOAD_POSTS_FAILURE,
+      error: error.response.data,
+    });
+  }
+}
+
+function* watchLoadPosts() {
+  yield takeLatest(LOAD_POSTS_REQUEST, loadPosts);
+}
 function* watchAddComment() {
   yield takeLatest(ADD_COMMENT_REQUEST, addComment);
 }
@@ -101,5 +128,10 @@ function* watchRemovePost() {
 }
 
 export default function* postSaga() {
-  yield all([fork(watchAddPost), fork(watchAddComment), fork(watchRemovePost)]);
+  yield all([
+    fork(watchAddPost),
+    fork(watchAddComment),
+    fork(watchRemovePost),
+    fork(watchLoadPosts),
+  ]);
 }
