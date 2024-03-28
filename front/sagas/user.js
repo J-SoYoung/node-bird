@@ -18,8 +18,6 @@ import {
   UNFOLLOW_FAILURE,
 } from "../reducers/user";
 
-const api = "http://localhost:3065";
-
 function unFollowAPI(data) {
   return axios.post("/api/unFollow", data);
 }
@@ -63,7 +61,7 @@ function* follow(action) {
 }
 
 function signUpAPI(data) {
-  return axios.post(`${api}/user`, data);
+  return axios.post("/user", data);
 }
 function* signUp(action) {
   try {
@@ -82,15 +80,16 @@ function* signUp(action) {
 }
 
 function logInAPI(data) {
-  return axios.post("/api/login", data);
+  console.log("saga-login", data);
+  return axios.post("/user/login", data);
 }
 function* logIn(action) {
+  console.log(action.data);
   try {
-    yield delay(1000);
-    // const result = yield call(logInAPI, action.data);
+    const result = yield call(logInAPI, action.data);
     yield put({
       type: LOG_IN_SUCCESS,
-      data: action.data,
+      data: result.data,
     });
   } catch (error) {
     yield put({
@@ -101,7 +100,7 @@ function* logIn(action) {
 }
 
 function logOutAPI() {
-  return axios.post("/api/logout");
+  return axios.post("/user/logout");
 }
 function* logOut(action) {
   try {

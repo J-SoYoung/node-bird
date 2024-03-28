@@ -1,4 +1,3 @@
-
 import { produce } from "immer";
 
 const dummyUser = (data) => {
@@ -110,7 +109,7 @@ const reducer = (state = initialState, action) => {
       case LOG_IN_SUCCESS: {
         draft.loginLoading = false;
         draft.loginDone = true;
-        draft.me = dummyUser(action.data);
+        draft.me = action.data;
         break;
       }
       case LOG_IN_FAILURE: {
