@@ -91,7 +91,6 @@ export let initialState = {
   addCommentError: null,
 };
 
-
 faker.seed(123);
 export const generateDummyPost = (number) =>
   Array(number)
@@ -182,7 +181,7 @@ const reducer = (state = initialState, action) => {
         break;
       }
       case LOAD_POSTS_SUCCESS: {
-        console.log("reducer post-", action.data);
+        // console.log("reducer post-", action.data);
         draft.LoadPostsLoaing = false;
         draft.LoadPostsDone = true;
         draft.mainPosts.push(...action.data);
