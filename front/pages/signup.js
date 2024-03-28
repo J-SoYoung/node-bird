@@ -1,11 +1,15 @@
-import React, { useCallback, useState } from "react";
-import useInput from "../hooks/useInput";
+import React, { useCallback, useEffect, useState } from "react";
+import Router from "next/router";
 import Head from "next/head";
-import AppLayout from "../components/AppLayout";
-import { Form, Input, Checkbox, Button } from "antd";
+
 import styled from "styled-components";
+import { Form, Input, Checkbox, Button } from "antd";
+
 import { useDispatch, useSelector } from "react-redux";
 import { SIGN_UP_REQUEST } from "../reducers/user";
+
+import useInput from "../hooks/useInput";
+import AppLayout from "../components/AppLayout";
 
 const ErrorMessage = styled.div`
   color: red;
@@ -13,11 +17,25 @@ const ErrorMessage = styled.div`
 
 const Signup = () => {
   const dispatch = useDispatch();
-  const { signUpLoading } = useSelector((state) => state.user);
+  const { signUpLoading, signUpDone, signUpError } = useSelector(
+    (state) => state.user
+  );
 
-  const [email, onChangeEmail, resetEmail] = useInput("");
-  const [nickname, onChangeNickname, resetNickname] = useInput("");
-  const [password, onChangePassword, resetPassword] = useInput("");
+  useEffect(() => {
+    if (signUpDone) {
+      Router.push("/");
+    }
+  }, [signUpDone]);
+
+  useEffect(() => {
+    if (signUpError) {
+      alert(signUpError);
+    }
+  }, [signUpError]);
+
+  const [email, onChangeEmail] = useInput("");
+  const [nickname, onChangeNickname] = useInput("");
+  const [password, onChangePassword] = useInput("");
 
   const [passwordCheck, setPasswordCheck] = useState("");
   const [passwordError, setPasswordError] = useState(false);
@@ -36,18 +54,15 @@ const Signup = () => {
   };
 
   const onSumbit = useCallback(() => {
+    if (!email || !nickname) return;
     if (password !== passwordCheck) return setPasswordError(true);
     if (!term) return setTermError(true);
-    console.log('회원가입',email, nickname, password, term);
+    console.log("회원가입", email, nickname, password, term);
 
     dispatch({
       type: SIGN_UP_REQUEST,
       data: { email, nickname, password },
     });
-
-    resetEmail();
-    resetNickname();
-    resetPassword();
   }, [email, password, passwordCheck, term]);
 
   return (
