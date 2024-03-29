@@ -1,4 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
+  console.log("로그인 시도중");
   const User = sequelize.define(
     "User", // MySQL에서는 users로 테이블 생성됨
     {
