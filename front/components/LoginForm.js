@@ -37,7 +37,6 @@ const LoginForm = () => {
   const [password, onChangePassword, resetPassword] = useInput("");
 
   const onSumbitForm = useCallback(() => {
-    console.log(email, password, "로그인");
     dispatch(loginRequestsAction({ email, password }));
   }, [email, password]);
 
