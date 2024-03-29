@@ -16,7 +16,15 @@ const LoginFormWrapper = styled(Form)`
 
 const LoginForm = () => {
   const dispatch = useDispatch();
-  const { loginLoading, loginDone, me } = useSelector((state) => state.user);
+  const { loginLoading, loginDone, me, loginError } = useSelector(
+    (state) => state.user
+  );
+
+  useEffect(() => {
+    if (loginError) {
+      alert(loginError);
+    }
+  }, [loginError]);
 
   useEffect(() => {
     if (loginDone) {
