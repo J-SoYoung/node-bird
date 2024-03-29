@@ -37,11 +37,11 @@ router.post("/login", (req, res, next) => {
           },
           {
             model: User, // follower
-            as: 'Followers',
+            as: "Followers",
           },
           {
             model: User,
-            as: 'Followings',
+            as: "Followings",
           },
         ],
       });
@@ -78,9 +78,12 @@ router.post("/", async (req, res, next) => {
 
 // POST /user/logout
 router.post("/logout", (req, res) => {
-  req.logout();
-  req.session.destroy();
-  res.send("logout OK");
+  console.log("로그아웃 api 서버요청");
+  req.logout(() => {
+    req.session.destroy();
+    res.send("logout OK");
+  });
+  // res.send("logout OK");
 });
 
 module.exports = router;
