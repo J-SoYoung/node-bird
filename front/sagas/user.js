@@ -80,13 +80,12 @@ function* signUp(action) {
 }
 
 function logInAPI(data) {
-  console.log("saga-login", data);
   return axios.post("/user/login", data);
 }
 function* logIn(action) {
-  console.log(action.data);
   try {
     const result = yield call(logInAPI, action.data);
+    // console.log('saga-login-result',result);
     yield put({
       type: LOG_IN_SUCCESS,
       data: result.data,
@@ -102,10 +101,10 @@ function* logIn(action) {
 function logOutAPI() {
   return axios.post("/user/logout");
 }
-function* logOut(action) {
+function* logOut() {
   try {
-    yield delay(1000);
-    // const result = yield call(logOutAPI);
+    // yield delay(1000);
+    const result = yield call(logOutAPI);
     yield put({
       type: LOG_OUT_SUCCESS,
     });
