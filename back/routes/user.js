@@ -35,20 +35,59 @@ router.post("/login", isNotLoggedIn, (req, res, next) => {
         include: [
           {
             model: Post, // 내가 쓴 게시글
+            attributes: ["id"],
           },
           {
             model: User, // follower
             as: "Followers",
+            attributes: ["id"],
           },
           {
             model: User,
             as: "Followings",
+            attributes: ["id"],
           },
         ],
       });
       return res.status(200).json(fullUserWithoutPassword);
     });
   })(req, res, next);
+});
+
+// GET /user
+router.get("/", async (req, res, next) => {
+  try {
+    if (req.user) {
+      const fullUserWithoutPassword = await User.findOne({
+        where: { id: req.user.id },
+        attributes: {
+          exclude: ["password"],
+        },
+        include: [
+          {
+            model: Post, // 내가 쓴 게시글
+            attributes: ["id"],
+          },
+          {
+            model: User, // follower
+            as: "Followers",
+            attributes: ["id"],
+          },
+          {
+            model: User,
+            as: "Followings",
+            attributes: ["id"],
+          },
+        ],
+      });
+
+      res.status(200).json(fullUserWithoutPassword);
+    }
+    res.status(200).json(null);
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
 });
 
 // POST /user/ (회원가입)

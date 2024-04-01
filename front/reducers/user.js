@@ -19,6 +19,10 @@ const dummyUser = (data) => {
 };
 
 export const initialState = {
+  loadMyInfoLoading: false, // 유저 정보 가져오기 시도중
+  loadMyInfoDone: false,
+  loadMyInfoError: null,
+
   loginLoading: false, // 로그인 시도중
   loginDone: false,
   loginError: null,
@@ -51,6 +55,10 @@ export const initialState = {
 // async Action
 
 // Action
+export const LOAD_MY_INFO_REQUEST = "LOAD_MY_INFO_REQUEST";
+export const LOAD_MY_INFO_SUCCESS = "LOAD_MY_INFO_SUCCESS";
+export const LOAD_MY_INFO_FAILURE = "LOAD_MY_INFO_FAILURE";
+
 export const SIGN_UP_REQUEST = "SIGN_UP_REQUEST";
 export const SIGN_UP_SUCCESS = "SIGN_UP_SUCCESS";
 export const SIGN_UP_FAILURE = "SIGN_UP_FAILURE";
@@ -100,6 +108,26 @@ export const logoutRequestsAction = () => {
 const reducer = (state = initialState, action) => {
   return produce(state, (draft) => {
     switch (action.type) {
+
+      case LOAD_MY_INFO_REQUEST: {
+        draft.loadMyInfoLoading = true;
+        draft.loadMyInfoDone = false;
+        draft.loadMyInfoError = null;
+        break;
+      }
+      case LOAD_MY_INFO_SUCCESS: {
+        draft.loadMyInfoLoading = false;
+        draft.loadMyInfoDone = true;
+        draft.me = action.data;
+        break;
+      }
+      case LOAD_MY_INFO_FAILURE: {
+        draft.loadMyInfoLoading = false;
+        draft.loadMyInfoDone = false;
+        draft.loadMyInfoError = action.error;
+        break;
+      }
+
       case LOG_IN_REQUEST: {
         draft.loginLoading = true;
         draft.loginDone = false;

@@ -16,6 +16,9 @@ import {
   UNFOLLOW_REQUEST,
   UNFOLLOW_SUCCESS,
   UNFOLLOW_FAILURE,
+  LOAD_MY_INFO_REQUEST,
+  LOAD_MY_INFO_SUCCESS,
+  LOAD_MY_INFO_FAILURE,
 } from "../reducers/user";
 
 function unFollowAPI(data) {
@@ -114,7 +117,28 @@ function* logOut() {
     });
   }
 }
+function loadMyInfoAPI() {
+  return axios.get("/user");
+}
+function* loadMyInfo() {
+  try {
+    const result = yield call(loadMyInfoAPI);
+    console.log("로드내정보-", result);
+    yield put({
+      type: LOAD_MY_INFO_SUCCESS,
+      data: result.data,
+    });
+  } catch (error) {
+    yield put({
+      type: LOAD_MY_INFO_FAILURE,
+      error: error.response.data,
+    });
+  }
+}
 
+function* watchLoadMyInfo() {
+  yield takeLatest(LOAD_MY_INFO_REQUEST, loadMyInfo);
+}
 function* watchFollow() {
   yield takeLatest(FOLLOW_REQUEST, follow);
 }
@@ -138,5 +162,6 @@ export default function* userSaga() {
     fork(watchSignup),
     fork(watchLogIn),
     fork(watchLogOut),
+    fork(watchLoadMyInfo),
   ]);
 }
