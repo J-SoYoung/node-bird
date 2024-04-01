@@ -1,6 +1,7 @@
 import axios from "axios";
 import {
   all,
+  call,
   delay,
   fork,
   put,
@@ -26,15 +27,15 @@ import { ADD_POST_TO_ME, REMOVE_POST_OF_ME } from "../reducers/user";
 import shortid from "shortid";
 
 function addCommentAPI(data) {
-  return axios.post(`/api/post/${data.id}/comment`);
+  console.log(data);
+  return axios.post(`/post/${data.postId}/comment`, data);
 }
 function* addComment(action) {
   try {
-    yield delay(1000);
-    // const result = yield call(addCommentAPI);
+    const result = yield call(addCommentAPI, { comment: action.data });
     yield put({
       type: ADD_COMMENT_SUCCESS,
-      data: action.data,
+      data: result.data,
     });
   } catch (error) {
     yield put({
@@ -44,25 +45,20 @@ function* addComment(action) {
   }
 }
 
-function addPostAPI() {
-  return axios.post("/api/post");
+function addPostAPI(data) {
+  return axios.post("/post", { content: data });
 }
 function* addPost(action) {
   const id = shortid.generate();
-
   try {
-    yield delay(1000);
-    // const result = yield call(addPostAPI);
+    const result = yield call(addPostAPI, action.data);
     yield put({
       type: ADD_POST_SUCCESS,
-      data: {
-        id,
-        content: action.data,
-      },
+      data: result.data,
     });
     yield put({
       type: ADD_POST_TO_ME,
-      data: id,
+      data: result.data.id,
     });
   } catch (error) {
     yield put({

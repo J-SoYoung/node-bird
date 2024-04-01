@@ -154,21 +154,6 @@ export const addCommentRequestAction = (data) => {
   };
 };
 
-const dummyComment = (data) => ({
-  User: { nickname: "thdud" },
-  contents: data,
-});
-
-const dummyPost = (data) => ({
-  id: data.id,
-  contents: data.content,
-  User: {
-    id: 1,
-    nickname: "thdud",
-  },
-  Image: [],
-  Comments: [],
-});
 
 // reducer
 const reducer = (state = initialState, action) => {
@@ -203,7 +188,7 @@ const reducer = (state = initialState, action) => {
       case ADD_POST_SUCCESS: {
         draft.addPostLoaing = false;
         draft.addPostDone = true;
-        draft.mainPosts.unshift(dummyPost(action.data));
+        draft.mainPosts.unshift(action.data);
         break;
       }
       case ADD_POST_FAILURE: {
@@ -238,10 +223,10 @@ const reducer = (state = initialState, action) => {
         break;
       }
       case ADD_COMMENT_SUCCESS: {
+        const post = draft.mainPosts.find((v) => v.id === action.data.PostId);
+        post.Comments.unshift(action.data);
         draft.addCommentLoaing = false;
         draft.addCommentDone = true;
-        const post = draft.mainPosts.find((v) => v.id === action.data.postId);
-        post.Comments.unshift(dummyComment(action.data.content));
         break;
 
         // const postIndex = state.mainPosts.findIndex(
