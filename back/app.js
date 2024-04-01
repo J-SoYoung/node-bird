@@ -25,8 +25,8 @@ passportCofig();
 // use 안에 들어가는 것들 => 미들웨어
 app.use(
   cors({
-    origin: "*",
-    credentials: false,
+    origin: "http://localhost:3000", // CORS 도메인허용 Access-Control-Allow-Origin
+    credentials: true, // 쿠키허용 Access-Control-Allow-credentials
   })
 );
 // express 서버실행.
