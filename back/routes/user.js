@@ -2,11 +2,12 @@ const express = require("express");
 const bcrypt = require("bcrypt");
 const passport = require("passport");
 const { Post, User } = require("../models");
+const { isLoggedIn, isNotLoggedIn } = require("./middlewares");
 
 const router = express.Router();
 
 // POST /user/login
-router.post("/login", (req, res, next) => {
+router.post("/login", isNotLoggedIn, (req, res, next) => {
   // 미들웨어 확장해서 passport사용하기.
   passport.authenticate("local", (serverError, user, clientError) => {
     if (serverError) {
@@ -51,7 +52,7 @@ router.post("/login", (req, res, next) => {
 });
 
 // POST /user/ (회원가입)
-router.post("/", async (req, res, next) => {
+router.post("/", isNotLoggedIn, async (req, res, next) => {
   try {
     const exUser = await User.findOne({
       where: {
@@ -77,7 +78,7 @@ router.post("/", async (req, res, next) => {
 });
 
 // POST /user/logout
-router.post("/logout", (req, res) => {
+router.post("/logout", isLoggedIn, (req, res) => {
   console.log("로그아웃 api 서버요청");
   req.logout(() => {
     req.session.destroy();
