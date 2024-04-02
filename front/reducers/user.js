@@ -108,7 +108,6 @@ export const logoutRequestsAction = () => {
 const reducer = (state = initialState, action) => {
   return produce(state, (draft) => {
     switch (action.type) {
-
       case LOAD_MY_INFO_REQUEST: {
         draft.loadMyInfoLoading = true;
         draft.loadMyInfoDone = false;
@@ -191,9 +190,9 @@ const reducer = (state = initialState, action) => {
         break;
       }
       case CHANGE_NICKNAME_SUCCESS: {
+        draft.me.nickname = action.data.nickname;
         draft.changeNicknameLoading = false;
         draft.changeNicknameDone = true;
-        draft.changeNicknameData = action.data;
         break;
       }
       case CHANGE_NICKNAME_FAILURE: {
