@@ -4,10 +4,12 @@ const session = require("express-session");
 const cookieParser = require("cookie-parser");
 const passport = require("passport");
 const dotenv = require("dotenv");
+const morgan = require("morgan");
 
 const db = require("./models");
 const passportCofig = require("./passport");
 const postRouter = require("./routes/post");
+const postsRouter = require("./routes/posts");
 const userRouter = require("./routes/user");
 
 dotenv.config();
@@ -21,6 +23,9 @@ db.sequelize
 
 // login 설정
 passportCofig();
+
+// log기록 라이브러리
+app.use(morgan("dev"));
 
 // use 안에 들어가는 것들 => 미들웨어
 app.use(
@@ -45,7 +50,9 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+// router
 app.use("/post", postRouter);
+app.use("/posts", postsRouter);
 app.use("/user", userRouter);
 
 app.listen(3065, () => {
