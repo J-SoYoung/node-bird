@@ -21,44 +21,6 @@ import {
   LOAD_MY_INFO_FAILURE,
 } from "../reducers/user";
 
-function unFollowAPI(data) {
-  return axios.post("/api/unFollow", data);
-}
-function* unFollow(action) {
-  try {;
-    yield delay(1000);
-    // const result = yield call(unFollowAPI);
-    yield put({
-      type: UNFOLLOW_SUCCESS,
-      data: action.data,
-    });
-  } catch (error) {
-    yield put({
-      type: UNFOLLOW_FAILURE,
-      error: error.response.data,
-    });
-  }
-}
-
-function followAPI(data) {
-  return axios.post("/api/follow", data);
-}
-function* follow(action) {
-  try {
-    yield delay(1000);
-    // const result = yield call(followAPI);
-    yield put({
-      type: FOLLOW_SUCCESS,
-      data: action.data,
-    });
-  } catch (error) {
-    yield put({
-      type: FOLLOW_FAILURE,
-      error: error.response.data,
-    });
-  }
-}
-
 function signUpAPI(data) {
   return axios.post("/user", data);
 }
@@ -128,10 +90,44 @@ function* loadMyInfo() {
     });
   }
 }
-
-function* watchLoadMyInfo() {
-  yield takeLatest(LOAD_MY_INFO_REQUEST, loadMyInfo);
+function unFollowAPI(data) {
+  return axios.post("/api/unFollow", data);
 }
+function* unFollow(action) {
+  try {
+    yield delay(1000);
+    // const result = yield call(unFollowAPI);
+    yield put({
+      type: UNFOLLOW_SUCCESS,
+      data: action.data,
+    });
+  } catch (error) {
+    yield put({
+      type: UNFOLLOW_FAILURE,
+      error: error.response.data,
+    });
+  }
+}
+
+function followAPI(data) {
+  return axios.post("/api/follow", data);
+}
+function* follow(action) {
+  try {
+    yield delay(1000);
+    // const result = yield call(followAPI);
+    yield put({
+      type: FOLLOW_SUCCESS,
+      data: action.data,
+    });
+  } catch (error) {
+    yield put({
+      type: FOLLOW_FAILURE,
+      error: error.response.data,
+    });
+  }
+}
+
 function* watchFollow() {
   yield takeLatest(FOLLOW_REQUEST, follow);
 }
@@ -146,6 +142,9 @@ function* watchLogIn() {
 }
 function* watchLogOut() {
   yield takeLatest(LOG_OUT_REQUEST, logOut);
+}
+function* watchLoadMyInfo() {
+  yield takeLatest(LOAD_MY_INFO_REQUEST, loadMyInfo);
 }
 
 export default function* userSaga() {
