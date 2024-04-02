@@ -25,14 +25,8 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
   User.associate = (db) => {
-    // user가 post를 여러개 작성할 수 있다
     db.User.hasMany(db.Post);
     db.User.hasMany(db.Comment);
-
-    // belongsToMany 다대다, 중간 table이 생성된다.
-    // through: 중간 table 이름 수정,
-    // as: 컬럼 별칭,
-    // foreignKey: 중간 table의 컬럼(userId - userId)이름을 바꿈
     db.User.belongsToMany(db.Post, { through: "Like", as: "Liked" });
     db.User.belongsToMany(db.User, {
       through: "Follow",
@@ -47,3 +41,11 @@ module.exports = (sequelize, DataTypes) => {
   };
   return User;
 };
+
+// user가 post를 여러개 작성할 수 있다
+// db.User.hasMany(db.Post);
+
+// belongsToMany 다대다, 중간 table이 생성된다.
+// through: 중간 table 이름 수정,
+// as: 컬럼 별칭,
+// foreignKey: 중간 table의 컬럼(userId - userId)이름을 바꿈
