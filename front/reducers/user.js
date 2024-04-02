@@ -228,14 +228,12 @@ const reducer = (state = initialState, action) => {
       }
 
       case FOLLOW_REQUEST: {
-        console.log("follow-reducer요청");
         draft.followLoading = true;
         draft.followDone = false;
         draft.followError = null;
         break;
       }
       case FOLLOW_SUCCESS: {
-        console.log("follow-reducer 성공", action.data);
         draft.followLoading = false;
         draft.me.Followings.push(action.data);
         draft.followDone = true;
@@ -249,14 +247,12 @@ const reducer = (state = initialState, action) => {
       }
 
       case UNFOLLOW_REQUEST: {
-        console.log("unfollow-reducer 요청");
         draft.unFollowLoading = true;
         draft.unFollowDone = false;
         draft.unFollowError = null;
         break;
       }
       case UNFOLLOW_SUCCESS: {
-        console.log("unfollow-reducer 성공", action.data);
         draft.unFollowLoading = false;
         draft.me.Followings = draft.me.Followings.filter(
           (f) => f.id !== action.data.id

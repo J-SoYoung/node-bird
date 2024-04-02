@@ -27,17 +27,17 @@ import { ADD_POST_TO_ME, REMOVE_POST_OF_ME } from "../reducers/user";
 import shortid from "shortid";
 
 function addCommentAPI(data) {
-  console.log(data);
-  return axios.post(`/post/${data.postId}/comment`, data);
+  return axios.post(`/post/${data.PostId}/comment`, data);
 }
 function* addComment(action) {
   try {
-    const result = yield call(addCommentAPI, { comment: action.data });
+    const result = yield call(addCommentAPI, action.data);
     yield put({
       type: ADD_COMMENT_SUCCESS,
       data: result.data,
     });
   } catch (error) {
+    console.error(error);
     yield put({
       type: ADD_COMMENT_FAILURE,
       error: error.response.data,
@@ -95,16 +95,15 @@ function* removePost(action) {
   }
 }
 
-function loadPostsAPI(data) {
-  return axios.get("/api/posts", data);
+function loadPostsAPI() {
+  return axios.get("/posts");
 }
-function* loadPosts(action) {
+function* loadPosts() {
   try {
-    yield delay(1000);
-    // const result = yield call(loadPostsAPI);
+    const result = yield call(loadPostsAPI);
     yield put({
       type: LOAD_POSTS_SUCCESS,
-      data: generateDummyPost(10),
+      data: result.data,
     });
   } catch (error) {
     console.log(error);

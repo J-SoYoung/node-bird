@@ -118,7 +118,6 @@ router.post("/", isNotLoggedIn, async (req, res, next) => {
 
 // POST /user/logout
 router.post("/logout", isLoggedIn, (req, res) => {
-  console.log("로그아웃 api 서버요청");
   req.logout(() => {
     req.session.destroy();
     res.send("logout OK");

@@ -1,76 +1,7 @@
 import { produce } from "immer";
-import shortid from "shortid";
-import { faker } from "@faker-js/faker";
 
 export let initialState = {
   mainPosts: [],
-  // mainPosts: [
-  //   {
-  //     id: 1,
-  //     User: {
-  //       id: 1,
-  //       nickname: "thdud",
-  //     },
-  //     contents: "첫번재 게시글 #해시태그 #익스프레스",
-  //     Images: [
-  //       {
-  //         id: shortid.generate(),
-  //         src: "https://raw.githubusercontent.com/J-SoYoung/node-bird/c19975b02f88bc1cbdd65ab78635ccb1935a51aa/assets/images/cat2.jpg",
-  //       },
-  //       {
-  //         id: shortid.generate(),
-  //         src: "https://raw.githubusercontent.com/J-SoYoung/node-bird/main/assets/images/bg3.jpg",
-  //       },
-  //       {
-  //         id: shortid.generate(),
-  //         src: "https://gimg.gilbut.co.kr/book/BN001958/rn_view_BN001958.jpg",
-  //       },
-  //     ],
-  //     Comments: [
-  //       {
-  //         id: shortid.generate(),
-  //         User: { id: shortid.generate(), nickname: "thdud2" },
-  //         contents: "하이큐",
-  //       },
-  //       {
-  //         id: shortid.generate(),
-  //         User: { id: shortid.generate(), nickname: "thdud11" },
-  //         contents: "오늘파묘",
-  //       },
-  //     ],
-  //   },
-  //   {
-  //     id: 2,
-  //     User: {
-  //       id: 1,
-  //       nickname: "thdud",
-  //     },
-  //     contents: "더미데이터입니다",
-  //     Images: [
-  //       {
-  //         id: shortid.generate(),
-  //         src: "https://raw.githubusercontent.com/J-SoYoung/node-bird/main/assets/images/bg3.jpg",
-  //       },
-  //     ],
-  //     Comments: [
-  //       {
-  //         id: shortid.generate(),
-  //         User: { id: shortid.generate(), nickname: "thdud333" },
-  //         contents: "하이큐323",
-  //       },
-  //       {
-  //         id: shortid.generate(),
-  //         User: { id: shortid.generate(), nickname: "thdud444" },
-  //         contents: "오늘파묘33",
-  //       },
-  //       {
-  //         id: shortid.generate(),
-  //         User: { id: shortid.generate(), nickname: "thdud444" },
-  //         contents: "오늘파묘33",
-  //       },
-  //     ],
-  //   },
-  // ],
   imagePaths: [],
   hasMorePost: true,
 
@@ -91,39 +22,30 @@ export let initialState = {
   addCommentError: null,
 };
 
-faker.seed(123);
-export const generateDummyPost = (number) =>
-  Array(number)
-    .fill()
-    .map((p, idx) => ({
-      // id: shortid.generate(),
-      // User: {
-      //   id: shortid.generate(),
-      //   nickname: "thdud",
-      // },
-      // contents: `dddd-${idx}`,
-      // Image: [],
-      // Comments: [],
-
-      id: shortid.generate(),
-      User: {
-        id: shortid.generate(),
-        nickname: faker.person.fullName(),
-      },
-      contents: faker.lorem.paragraph(),
-      Images: [
-        {
-          src: faker.image.url(),
-        },
-      ],
-      Comments: [
-        {
-          id: shortid.generate(),
-          User: { id: shortid.generate(), nickname: faker.person.fullName() },
-          contents: faker.lorem.sentence(),
-        },
-      ],
-    }));
+// faker.seed(123);
+// export const generateDummyPost = (number) =>
+//   Array(number)
+//     .fill()
+//     .map((p, idx) => ({
+//       id: shortid.generate(),
+//       User: {
+//         id: shortid.generate(),
+//         nickname: faker.person.fullName(),
+//       },
+//       contents: faker.lorem.paragraph(),
+//       Images: [
+//         {
+//           src: faker.image.url(),
+//         },
+//       ],
+//       Comments: [
+//         {
+//           id: shortid.generate(),
+//           User: { id: shortid.generate(), nickname: faker.person.fullName() },
+//           contents: faker.lorem.sentence(),
+//         },
+//       ],
+//     }));
 
 export const LOAD_POSTS_REQUEST = "LOAD_POSTS_REQUEST";
 export const LOAD_POSTS_SUCCESS = "LOAD_POSTS_SUCCESS";
@@ -154,7 +76,6 @@ export const addCommentRequestAction = (data) => {
   };
 };
 
-
 // reducer
 const reducer = (state = initialState, action) => {
   return produce(state, (draft) => {
@@ -166,7 +87,6 @@ const reducer = (state = initialState, action) => {
         break;
       }
       case LOAD_POSTS_SUCCESS: {
-        // console.log("reducer post-", action.data);
         draft.LoadPostsLoaing = false;
         draft.LoadPostsDone = true;
         draft.mainPosts.push(...action.data);
@@ -223,7 +143,9 @@ const reducer = (state = initialState, action) => {
         break;
       }
       case ADD_COMMENT_SUCCESS: {
-        const post = draft.mainPosts.find((v) => v.id === action.data.PostId);
+        const post = draft.mainPosts.find(
+          (v) => Number(v.id) === Number(action.data.PostId)
+        );
         post.Comments.unshift(action.data);
         draft.addCommentLoaing = false;
         draft.addCommentDone = true;

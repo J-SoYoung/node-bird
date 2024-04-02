@@ -36,7 +36,7 @@ const FollowButton = ({ post }) => {
 };
 
 FollowButton.propTypes = {
-  post: PropTypes,
+  post: PropTypes.object,
 };
 
 export default FollowButton;

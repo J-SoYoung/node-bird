@@ -25,9 +25,7 @@ function unFollowAPI(data) {
   return axios.post("/api/unFollow", data);
 }
 function* unFollow(action) {
-  console.log("unfollow-saga요청");
-  try {
-    console.log("unfollow-saga성공");
+  try {;
     yield delay(1000);
     // const result = yield call(unFollowAPI);
     yield put({
@@ -46,9 +44,7 @@ function followAPI(data) {
   return axios.post("/api/follow", data);
 }
 function* follow(action) {
-  console.log("follow-saga요청");
   try {
-    console.log("follow-sagat성공");
     yield delay(1000);
     // const result = yield call(followAPI);
     yield put({
@@ -69,7 +65,6 @@ function signUpAPI(data) {
 function* signUp(action) {
   try {
     const result = yield call(signUpAPI, action.data);
-    console.log(result);
     yield put({
       type: SIGN_UP_SUCCESS,
     });
@@ -88,7 +83,6 @@ function logInAPI(data) {
 function* logIn(action) {
   try {
     const result = yield call(logInAPI, action.data);
-    // console.log('saga-login-result',result);
     yield put({
       type: LOG_IN_SUCCESS,
       data: result.data,
@@ -123,7 +117,6 @@ function loadMyInfoAPI() {
 function* loadMyInfo() {
   try {
     const result = yield call(loadMyInfoAPI);
-    console.log("로드내정보-", result);
     yield put({
       type: LOAD_MY_INFO_SUCCESS,
       data: result.data,
