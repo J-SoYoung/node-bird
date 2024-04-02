@@ -16,6 +16,7 @@ import { REMOVE_POST_REQUEST } from "../reducers/post";
 import FollowButton from "./FollowButton";
 
 const PostCard = ({ post }) => {
+  console.log(post);
   const dispatch = useDispatch();
   const id = useSelector((state) => state.user.me?.id);
   const { removePostLoaing } = useSelector((state) => state.post);
@@ -86,21 +87,21 @@ const PostCard = ({ post }) => {
           avatar={<Avatar>{post.User?.nickname[0]}</Avatar>}
           title={post.User?.nickname}
           description={
-            <PostCardContent postData={post.contents}></PostCardContent>
+            <PostCardContent postData={post.content}></PostCardContent>
           }
         />
       </Card>
       {commentFormOpen && (
         <div>
-          <CommentForm post={post} />
+          {id && <CommentForm post={post} />}
           <div>{`${post.Comments.length}개의 댓글`}</div>
-          {post.Comments.map((c, idx) => {
+          {post.Comments.map((c) => {
             return (
               <Comment
-                key={idx}
+                key={c.id}
                 author={c.User.nickname}
                 avatar={<Avatar>{c.User.nickname[0]}</Avatar>}
-                content={c.contents}
+                content={c.content}
               />
             );
           })}
@@ -115,7 +116,7 @@ PostCard.propTypes = {
     id: PropTypes.number,
     User: PropTypes.object,
     contents: PropTypes.string,
-    createAt: PropTypes.object,
+    createAt: PropTypes.string,
     Comments: PropTypes.arrayOf(PropTypes.object),
     Images: PropTypes.arrayOf(PropTypes.object),
   }).isRequired,

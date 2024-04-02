@@ -25,8 +25,8 @@ const CommentForm = ({ post }) => {
       type: ADD_COMMENT_REQUEST,
       data: {
         content: commentText,
-        postId: post.id,
-        userId: id,
+        PostId: post.id,
+        UserId: post.UserId,
       },
     });
   }, [commentText, id]);

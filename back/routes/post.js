@@ -4,7 +4,7 @@ const { isLoggedIn } = require("./middlewares");
 
 const router = express.Router();
 
-// Post /post
+// Post /post 포스트작성
 router.post("/", isLoggedIn, async (req, res, next) => {
   // 로그인 후에는 passport가 deserializeUser를 실행해 req.user에 접근가능
 
@@ -16,15 +16,17 @@ router.post("/", isLoggedIn, async (req, res, next) => {
     const fullPost = await Post.findOne({
       where: { id: post.id },
       include: [
-        {
-          model: Image,
-        },
+        { model: Image },
         {
           model: Comment,
+          include: [
+            {
+              model: User,
+              attributes: ["id", "nickname"],
+            },
+          ],
         },
-        {
-          model: User,
-        },
+        { model: User, attributes: ["id", "nickname"] },
       ],
     });
 
@@ -35,6 +37,7 @@ router.post("/", isLoggedIn, async (req, res, next) => {
   }
 });
 
+// Post /postId/comment 댓글작성
 router.post("/:postId/comment", isLoggedIn, async (req, res, next) => {
   try {
     const post = await Post.findOne({
@@ -49,16 +52,29 @@ router.post("/:postId/comment", isLoggedIn, async (req, res, next) => {
     const comment = await Comment.create({
       content: req.body.content,
       PostId: req.params.postId,
-      Userid: req.user.id,
+      UserId: req.user.id,
+    });
+    const fullComment = await Comment.findOne({
+      where: {
+        id: comment.id,
+      },
+      include: [
+        {
+          model: User,
+          attributes: ["id", "nickname"],
+        },
+      ],
     });
 
-    res.status(201).json(comment);
+    // res.status(201).json(comment);
+    res.status(201).json(fullComment);
   } catch (error) {
     console.error(error);
     next(error);
   }
 });
 
+// DELETE /post 포스트삭제
 router.delete("/", (req, res) => {
   res.json({ id: 1 });
 });
