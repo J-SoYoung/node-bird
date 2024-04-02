@@ -141,9 +141,12 @@ const reducer = (state = initialState, action) => {
         break;
       }
       case REMOVE_POST_SUCCESS: {
+
         draft.removePostLoaing = false;
         draft.removePostDone = true;
-        draft.mainPosts = state.mainPosts.filter((v) => v.id !== action.data);
+        draft.mainPosts = draft.mainPosts.filter(
+          (v) => Number(v.id) !== Number(action.data.PostId)
+        );
         break;
       }
       case REMOVE_POST_FAILURE: {
