@@ -234,7 +234,7 @@ const reducer = (state = initialState, action) => {
       }
       case FOLLOW_SUCCESS: {
         draft.followLoading = false;
-        draft.me.Followings.push(action.data);
+        draft.me.Followings.push({id: action.data.UserId});
         draft.followDone = true;
         break;
       }
@@ -254,7 +254,7 @@ const reducer = (state = initialState, action) => {
       case UNFOLLOW_SUCCESS: {
         draft.unFollowLoading = false;
         draft.me.Followings = draft.me.Followings.filter(
-          (f) => f.id !== action.data.id
+          (f) => f.id !== action.data.UserId
         );
         draft.unFollowDone = true;
         break;

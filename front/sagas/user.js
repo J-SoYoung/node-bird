@@ -94,15 +94,14 @@ function* loadMyInfo() {
   }
 }
 function unFollowAPI(data) {
-  return axios.post("/api/unFollow", data);
+  return axios.delete(`/user/${data}/follow`);
 }
 function* unFollow(action) {
   try {
-    yield delay(1000);
-    // const result = yield call(unFollowAPI);
+    const result = yield call(unFollowAPI, action.data);
     yield put({
       type: UNFOLLOW_SUCCESS,
-      data: action.data,
+      data: result.data,
     });
   } catch (error) {
     yield put({
@@ -113,15 +112,14 @@ function* unFollow(action) {
 }
 
 function followAPI(data) {
-  return axios.post("/api/follow", data);
+  return axios.patch(`/user/${data}/follow`);
 }
 function* follow(action) {
   try {
-    yield delay(1000);
-    // const result = yield call(followAPI);
+    const result = yield call(followAPI, action.data);
     yield put({
       type: FOLLOW_SUCCESS,
-      data: action.data,
+      data: result.data,
     });
   } catch (error) {
     yield put({
