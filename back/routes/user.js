@@ -82,8 +82,9 @@ router.get("/", async (req, res, next) => {
       });
 
       res.status(200).json(fullUserWithoutPassword);
+    } else {
+      res.status(200).json(null);
     }
-    res.status(200).json(null);
   } catch (error) {
     console.error(error);
     next(error);
@@ -173,5 +174,41 @@ router.delete("/:userId/follow", isLoggedIn, async (req, res, next) => {
   }
 });
 
+// GET /user/followers 팔로워 리스트 불러오기
+router.get("/followers", isLoggedIn, async (req, res, next) => {
+  try {
+    const user = await User.findOne({ where: { id: req.user.id } });
+    if (!user) {
+      res.status(403).send("존재하지 않는 유저입니다");
+    }
+    const followers = await user.getFollowers({
+      attributes: {
+        exclude: ["password"],
+      },
+    });
+    res.status(200).json(followers);
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+// GET /user/followings 팔로잉 리스트 불러오기
+router.get("/followings", isLoggedIn, async (req, res, next) => {
+  try {
+    const user = await User.findOne({ where: { id: req.user.id } });
+    if (!user) {
+      res.status(403).send("존재하지 않는 유저입니다");
+    }
+    const followings = await user.getFollowings({
+      attributes: {
+        exclude: ["password"],
+      },
+    });
+    res.status(200).json(followings);
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
 
 module.exports = router;
