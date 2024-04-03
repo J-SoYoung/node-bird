@@ -33,6 +33,10 @@ export const initialState = {
   unFollowDone: false,
   unFollowError: null,
 
+  removeFollowerLoading: false, // 팔로워 제거 시도중
+  removeFollowerDone: false,
+  removeFollowerError: null,
+
   changeNicknameLoading: false, // 닉네임 변경 시도중
   changeNicknameDone: false,
   changeNicknameError: null,
@@ -76,6 +80,10 @@ export const FOLLOW_FAILURE = "FOLLOW_FAILURE";
 export const UNFOLLOW_REQUEST = "UNFOLLOW_REQUEST";
 export const UNFOLLOW_SUCCESS = "UNFOLLOW_SUCCESS";
 export const UNFOLLOW_FAILURE = "UNFOLLOW_FAILURE";
+
+export const REMOVE_FOLLOWER_REQUEST = "REMOVE_FOLLOWER_REQUEST";
+export const REMOVE_FOLLOWER_SUCCESS = "REMOVE_FOLLOWER_SUCCESS";
+export const REMOVE_FOLLOWER_FAILURE = "REMOVE_FOLLOWER_FAILURE";
 
 export const CHANGE_NICKNAME_REQUEST = "CHANGE_NICKNAME_REQUEST";
 export const CHANGE_NICKNAME_SUCCESS = "CHANGE_NICKNAME_SUCCESS";
@@ -200,30 +208,6 @@ const reducer = (state = initialState, action) => {
         break;
       }
 
-      case ADD_POST_TO_ME: {
-        draft.me.Posts.unshift({ id: action.data });
-        break;
-        // return {
-        //   ...state,
-        //   me: {
-        //     ...state.me,
-        //     Posts: [{ id: action.data }, ...state.me.Posts],
-        //   },
-        // };
-      }
-
-      case REMOVE_POST_OF_ME: {
-        draft.me.Posts = draft.me.Posts.filter((v) => v.id !== action.data);
-        break;
-        // return {
-        //   ...state,
-        //   me: {
-        //     ...state.me,
-        //     Posts: state.me.Posts.filter((v) => v.id !== action.data),
-        //   },
-        // };
-      }
-
       case FOLLOW_REQUEST: {
         draft.followLoading = true;
         draft.followDone = false;
@@ -250,10 +234,10 @@ const reducer = (state = initialState, action) => {
         break;
       }
       case UNFOLLOW_SUCCESS: {
-        draft.unFollowLoading = false;
         draft.me.Followings = draft.me.Followings.filter(
           (f) => f.id !== action.data.UserId
         );
+        draft.unFollowLoading = false;
         draft.unFollowDone = true;
         break;
       }
@@ -264,6 +248,27 @@ const reducer = (state = initialState, action) => {
         break;
       }
 
+      case REMOVE_FOLLOWER_REQUEST: {
+        draft.removeFollowerLoading = true;
+        draft.removeFollowerDone = false;
+        draft.removeFollowerError = null;
+        break;
+      }
+      case REMOVE_FOLLOWER_SUCCESS: {
+        draft.me.Followers = draft.me.Followers.filter(
+          (f) => f.id !== action.data.UserId
+        );
+        draft.removeFollowerLoading = false;
+        draft.removeFollowerDone = true;
+        break;
+      }
+      case REMOVE_FOLLOWER_FAILURE: {
+        draft.removeFollowerLoading = false;
+        draft.removeFollowerDone = false;
+        draft.removeFollowerError = action.error;
+        break;
+      }
+
       case LOAD_FOLLOWERS_REQUEST: {
         draft.loadFollowersLoading = true;
         draft.loadFollowersDone = false;
@@ -271,7 +276,7 @@ const reducer = (state = initialState, action) => {
         break;
       }
       case LOAD_FOLLOWERS_SUCCESS: {
-        draft.me.Followings = action.data;
+        draft.me.Followers = action.data;
         draft.loadFollowersLoading = false;
         draft.loadFollowersDone = true;
         break;
@@ -300,6 +305,30 @@ const reducer = (state = initialState, action) => {
         draft.loadFollowingsDone = false;
         draft.loadFollowingsError = action.error;
         break;
+      }
+
+      case ADD_POST_TO_ME: {
+        draft.me.Posts.unshift({ id: action.data });
+        break;
+        // return {
+        //   ...state,
+        //   me: {
+        //     ...state.me,
+        //     Posts: [{ id: action.data }, ...state.me.Posts],
+        //   },
+        // };
+      }
+
+      case REMOVE_POST_OF_ME: {
+        draft.me.Posts = draft.me.Posts.filter((v) => v.id !== action.data);
+        break;
+        // return {
+        //   ...state,
+        //   me: {
+        //     ...state.me,
+        //     Posts: state.me.Posts.filter((v) => v.id !== action.data),
+        //   },
+        // };
       }
 
       default: {

@@ -3,6 +3,8 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 import { StopOutlined } from "@ant-design/icons";
 import { Card, List } from "antd";
+import { useDispatch } from "react-redux";
+import { REMOVE_FOLLOWER_REQUEST, UNFOLLOW_REQUEST } from "../reducers/user";
 
 const ListWrapper = styled(List)`
   margin-bottom: 10px;
@@ -13,6 +15,22 @@ const ButtonWrapper = styled.div`
   margin: 10px 0;
 `;
 const FollowList = ({ header, data }) => {
+  const dispatch = useDispatch();
+
+  const onClickUnFollow = (id) => {
+    if (header === "팔로잉") {
+      dispatch({
+        type: UNFOLLOW_REQUEST,
+        data: id,
+      });
+    } else if (header === "팔로워") {
+      dispatch({
+        type: REMOVE_FOLLOWER_REQUEST,
+        data: id,
+      });
+    }
+  };
+
   return (
     <>
       <ListWrapper
@@ -29,7 +47,14 @@ const FollowList = ({ header, data }) => {
         dataSource={data}
         renderItem={(item) => (
           <List.Item style={{ marginTop: 20 }}>
-            <Card actions={[<StopOutlined key="stop" />]}>
+            <Card
+              actions={[
+                <StopOutlined
+                  key="stop"
+                  onClick={() => onClickUnFollow(item.id)}
+                />,
+              ]}
+            >
               <Card.Meta description={item.nickname} />
             </Card>
           </List.Item>
