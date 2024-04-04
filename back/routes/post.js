@@ -15,8 +15,30 @@ try {
   fs.mkdirSync("uploads");
 }
 
+// multi formData설정
+const upload = multer({
+  storage: multer.diskStorage({
+    destination(req, file, done) {
+      done(null, "uploads");
+    },
+    filename(req, file, done) {
+      // thdud.png
+      const ext = path.extname(file.originalname); //확장자 추출 : .png
+      const basename = path.basename(file.originalname, ext); // filename : 소영
+      done(null, basename + "_" + new Date().getTime() + ext); // thdud124345123.png
+    },
+  }),
+  limits: { fileSize: 20 * 1024 * 1024 }, // 20MB
+});
+
+// POST /images 이미지 추가
+router.post("/images", isLoggedIn, upload.array("image"), (req, res, next) => {
+  console.log(req.files);
+  res.json(req.files.map((v) => v.filename));
+});
+
 // Post /post 포스트작성
-router.post("/", isLoggedIn, async (req, res, next) => {
+router.post("/", isLoggedIn, upload.none(), async (req, res, next) => {
   // 로그인 후에는 passport가 deserializeUser를 실행해 req.user에 접근가능
 
   try {
@@ -24,6 +46,22 @@ router.post("/", isLoggedIn, async (req, res, next) => {
       content: req.body.content,
       UserId: req.user.id,
     });
+
+    if (req.body.image) {
+      if (Array.isArray(req.body.image)) {
+        // 이미지 여러개 올리는 경우 [ thdud.png, thdud2.jpg ]
+        // 실제 파일은 upload폴더에, db에는 파일에 접근할 수 있는 주소만 올린다.
+        const images = await Promise.all(
+          req.body.image.map((image) => Image.create({ src: image }))
+        );
+        await post.addImages(images);
+      } else {
+        // 이미지 한 개만 올리는 경우 thdud.png
+        const images = await Image.create({ src: req.body.image });
+        await post.addImages(images);
+      }
+    }
+
     const fullPost = await Post.findOne({
       where: { id: post.id },
       include: [
@@ -139,23 +177,4 @@ router.delete("/:postId", isLoggedIn, async (req, res, next) => {
   }
 });
 
-const upload = multer({
-  storage: multer.diskStorage({
-    destination(req, file, done) {
-      done(null, "uploads");
-    },
-    filename(req, file, done) {
-      // thdud.png
-      const ext = path.extname(file.originalname); //확장자 추출 : .png
-      const basename = path.basename(file.originalname, ext); // filename : 소영
-      done(null, basename + new Date().getTime() + ext); // thdud124345123.png
-    },
-  }),
-  limits: { fileSize: 20 * 1024 * 1024 }, // 20MB
-});
-// POST /images 이미지 추가
-router.post("/images", isLoggedIn, upload.array("image"), (req, res, next) => {
-  console.log(req.files);
-  res.json(req.files.map((v) => v.filename));
-});
 module.exports = router;

@@ -5,6 +5,7 @@ const cookieParser = require("cookie-parser");
 const passport = require("passport");
 const dotenv = require("dotenv");
 const morgan = require("morgan");
+const path = require("path");
 
 const db = require("./models");
 const passportCofig = require("./passport");
@@ -34,10 +35,16 @@ app.use(
     credentials: true, // 쿠키허용 Access-Control-Allow-credentials
   })
 );
+
 // express 서버실행. 일반 axios호출
 app.use(express.json());
-// 프론트에서 받은 데이터를 req.body에 넣음, 일반 form데이터 받을 때 
+
+// front에서도 서버의 폴더 접근할 수 있도록 설정 ( image 미리보기 때문 )
+app.use("/", express.static(path.join(__dirname, "uploads")));
+
+// 프론트에서 받은 데이터를 req.body에 넣음, 일반 form데이터 받을 때
 app.use(express.urlencoded({ extended: true }));
+
 // session, cookie
 app.use(cookieParser("nodebirdsecret"));
 app.use(
