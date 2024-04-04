@@ -34,9 +34,9 @@ app.use(
     credentials: true, // 쿠키허용 Access-Control-Allow-credentials
   })
 );
-// express 서버실행.
+// express 서버실행. 일반 axios호출
 app.use(express.json());
-// 프론트에서 받은 데이터를 req.body에 넣음
+// 프론트에서 받은 데이터를 req.body에 넣음, 일반 form데이터 받을 때 
 app.use(express.urlencoded({ extended: true }));
 // session, cookie
 app.use(cookieParser("nodebirdsecret"));
