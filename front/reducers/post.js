@@ -83,6 +83,8 @@ export const UPLOAD_IMAGES_REQUEST = "UPLOAD_IMAGES_REQUEST";
 export const UPLOAD_IMAGES_SUCCESS = "UPLOAD_IMAGES_SUCCESS";
 export const UPLOAD_IMAGES_FAILURE = "UPLOAD_IMAGES_FAILURE";
 
+export const REMOVE_IMAGE = "REMOVE_IMAGE";
+
 export const addPostRequestAction = (data) => {
   return {
     type: ADD_POST_REQUEST,
@@ -129,6 +131,7 @@ const reducer = (state = initialState, action) => {
         draft.addPostLoaing = false;
         draft.addPostDone = true;
         draft.mainPosts.unshift(action.data);
+        draft.imagePaths = [];
         break;
       }
       case ADD_POST_FAILURE: {
@@ -252,6 +255,13 @@ const reducer = (state = initialState, action) => {
         draft.uploadImagesError = action.error;
         break;
       }
+
+      case REMOVE_IMAGE: {
+        console.log("redux-remove image", action.data);
+        draft.imagePaths = draft.imagePaths.filter((v, i) => i !== action.data);
+        break;
+      }
+
       default:
         break;
     }
