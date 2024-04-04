@@ -79,6 +79,10 @@ export const UNLIKE_POST_REQUEST = "UNLIKE_POST_REQUEST";
 export const UNLIKE_POST_SUCCESS = "UNLIKE_POST_SUCCESS";
 export const UNLIKE_POST_FAILURE = "UNLIKE_POST_FAILURE";
 
+export const UPLOAD_IMAGES_REQUEST = "UPLOAD_IMAGES_REQUEST";
+export const UPLOAD_IMAGES_SUCCESS = "UPLOAD_IMAGES_SUCCESS";
+export const UPLOAD_IMAGES_FAILURE = "UPLOAD_IMAGES_FAILURE";
+
 export const addPostRequestAction = (data) => {
   return {
     type: ADD_POST_REQUEST,
@@ -141,7 +145,6 @@ const reducer = (state = initialState, action) => {
         break;
       }
       case REMOVE_POST_SUCCESS: {
-
         draft.removePostLoaing = false;
         draft.removePostDone = true;
         draft.mainPosts = draft.mainPosts.filter(
@@ -231,6 +234,24 @@ const reducer = (state = initialState, action) => {
         break;
       }
 
+      case UPLOAD_IMAGES_REQUEST: {
+        draft.uploadImagesLoading = true;
+        draft.uploadImagesDone = false;
+        draft.uploadImagesError = null;
+        break;
+      }
+      case UPLOAD_IMAGES_SUCCESS: {
+        draft.imagePaths = action.data;
+        draft.uploadImagesLoading = false;
+        draft.uploadImagesDone = true;
+        break;
+      }
+      case UPLOAD_IMAGES_FAILURE: {
+        draft.uploadImagesLoading = false;
+        draft.uploadImagesDone = false;
+        draft.uploadImagesError = action.error;
+        break;
+      }
       default:
         break;
     }
