@@ -3,7 +3,7 @@ import { produce } from "immer";
 export let initialState = {
   mainPosts: [],
   imagePaths: [],
-  hasMorePost: true,
+  hasMorePosts: true,
 
   LoadPostsLoaing: false,
   LoadPostsDone: false,
@@ -119,7 +119,7 @@ const reducer = (state = initialState, action) => {
         draft.LoadPostsLoaing = false;
         draft.LoadPostsDone = true;
         draft.mainPosts.push(...action.data);
-        draft.hasMorePost = draft.mainPosts.length < 50;
+        draft.hasMorePosts = action.data.length === 10;
         break;
       }
       case LOAD_POSTS_FAILURE: {

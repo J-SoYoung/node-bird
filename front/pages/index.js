@@ -9,7 +9,7 @@ import { LOAD_MY_INFO_REQUEST } from "../reducers/user";
 const Home = () => {
   const dispatch = useDispatch();
   const { me } = useSelector((state) => state.user);
-  const { mainPosts, hasMorePost, LoadPostsLoaing, retweetError } = useSelector(
+  const { mainPosts, hasMorePosts, LoadPostsLoaing, retweetError } = useSelector(
     (state) => state.post
   );
 
@@ -35,10 +35,11 @@ const Home = () => {
       // console.log("LoadPostsLoaing", LoadPostsLoaing);
 
       if (userScroll + clientHeight > scrollHeight - 300) {
-        if (hasMorePost && !LoadPostsLoaing) {
+        if (hasMorePosts && !LoadPostsLoaing) {
+          const lastId = mainPosts[mainPosts.length - 1]?.id;
           dispatch({
             type: LOAD_POSTS_REQUEST,
-            // data: mainPosts[mainPosts.length - 1].id,
+            lastId,
           });
         }
       }
@@ -48,7 +49,7 @@ const Home = () => {
     return () => {
       window.removeEventListener("scroll", onScroll);
     };
-  }, [mainPosts, hasMorePost, LoadPostsLoaing]);
+  }, [mainPosts, hasMorePosts, LoadPostsLoaing]);
 
   return (
     <>
