@@ -21,14 +21,13 @@ import {
 import FollowButton from "./FollowButton";
 
 const PostCard = ({ post }) => {
-  console.log(post);
   const dispatch = useDispatch();
   const { removePostLoaing } = useSelector((state) => state.post);
   const id = useSelector((state) => state.user.me?.id);
 
   const onUnLike = useCallback(() => {
     if (!id) {
-      return alert("로그인이 필요합니다");
+      return alert("로그인이 필요합니다.");
     }
     return dispatch({
       type: UNLIKE_POST_REQUEST,
@@ -38,7 +37,7 @@ const PostCard = ({ post }) => {
 
   const onLike = useCallback(() => {
     if (!id) {
-      return alert("로그인이 필요합니다");
+      return alert("로그인이 필요합니다.");
     }
     return dispatch({
       type: LIKE_POST_REQUEST,
@@ -53,7 +52,7 @@ const PostCard = ({ post }) => {
 
   const onRemovePost = useCallback(() => {
     if (!id) {
-      return alert("로그인이 필요합니다");
+      return alert("로그인이 필요합니다.");
     }
     return dispatch({
       type: REMOVE_POST_REQUEST,
@@ -63,7 +62,7 @@ const PostCard = ({ post }) => {
 
   const onRetweet = useCallback(() => {
     if (!id) {
-      return alert("로그인이 필요합니다");
+      return alert("로그인이 필요합니다.");
     }
     return dispatch({
       type: RETWEET_REQUEST,
@@ -114,7 +113,7 @@ const PostCard = ({ post }) => {
           </Popover>,
         ]}
         title={
-          post.RetweetId ? `${post.User.nickname}님이 리트윗 하셨습니다` : null
+          post.RetweetId ? `${post.User.nickname}님이 리트윗 하셨습니다.` : null
         }
         extra={id && <FollowButton post={post} />}
       >

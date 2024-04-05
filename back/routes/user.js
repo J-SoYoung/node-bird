@@ -100,7 +100,7 @@ router.post("/", isNotLoggedIn, async (req, res, next) => {
       },
     });
     if (exUser) {
-      return res.status(403).send("이미 사용중인 이메일입니다");
+      return res.status(403).send("이미 사용중인 이메일입니다.");
     }
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
     await User.create({
@@ -149,7 +149,7 @@ router.patch("/:userId/follow", isLoggedIn, async (req, res, next) => {
   try {
     const user = await User.findOne({ where: { id: req.params.userId } });
     if (!user) {
-      res.status(403).send("존재하지 않는 유저입니다");
+      res.status(403).send("존재하지 않는 유저입니다.");
     }
     await user.addFollowers(req.user.id);
     res.status(200).json({ UserId: parseInt(req.params.userId, 10) });
@@ -164,7 +164,7 @@ router.delete("/:userId/follow", isLoggedIn, async (req, res, next) => {
   try {
     const user = await User.findOne({ where: { id: req.params.userId } });
     if (!user) {
-      res.status(403).send("존재하지 않는 유저입니다");
+      res.status(403).send("존재하지 않는 유저입니다.");
     }
     await user.removeFollowers(req.user.id);
     res.status(200).json({ UserId: parseInt(req.params.userId, 10) });
@@ -179,7 +179,7 @@ router.get("/followers", isLoggedIn, async (req, res, next) => {
   try {
     const user = await User.findOne({ where: { id: req.user.id } });
     if (!user) {
-      res.status(403).send("존재하지 않는 유저입니다");
+      res.status(403).send("존재하지 않는 유저입니다.");
     }
     const followers = await user.getFollowers({
       attributes: {
@@ -197,7 +197,7 @@ router.get("/followings", isLoggedIn, async (req, res, next) => {
   try {
     const user = await User.findOne({ where: { id: req.user.id } });
     if (!user) {
-      res.status(403).send("존재하지 않는 유저입니다");
+      res.status(403).send("존재하지 않는 유저입니다.");
     }
     const followings = await user.getFollowings({
       attributes: {
@@ -216,7 +216,7 @@ router.delete("/follower/:userId", isLoggedIn, async (req, res, next) => {
   try {
     const user = await User.findOne({ where: { id: req.params.userId } });
     if (!user) {
-      res.status(403).send("존재하지 않는 유저입니다");
+      res.status(403).send("존재하지 않는 유저입니다.");
     }
     await user.removeFollowing(req.user.id);
     res.status(200).json({ UserId: parseInt(req.params.userId, 10) });

@@ -122,14 +122,14 @@ const Signup = () => {
           />
         </div>
         {passwordError && (
-          <ErrorMessage>비밀번호가 일치하지 않습니다</ErrorMessage>
+          <ErrorMessage>비밀번호가 일치하지 않습니다.</ErrorMessage>
         )}
         <div>
           <Checkbox name="user-term" value={term} onChange={onChangeTerm}>
             Young와 프로그래밍 공부 하시겠습니까?
           </Checkbox>
           {termError && (
-            <ErrorMessage>이용약관에 동의하셔야 합니다</ErrorMessage>
+            <ErrorMessage>이용약관에 동의하셔야 합니다.</ErrorMessage>
           )}
         </div>
         <div>
