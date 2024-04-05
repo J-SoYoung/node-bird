@@ -9,15 +9,18 @@ import { LOAD_MY_INFO_REQUEST } from "../reducers/user";
 const Home = () => {
   const dispatch = useDispatch();
   const { me } = useSelector((state) => state.user);
-  const { mainPosts, hasMorePost, LoadPostsLoaing } = useSelector(
+  const { mainPosts, hasMorePost, LoadPostsLoaing, retweetError } = useSelector(
     (state) => state.post
   );
 
+  useEffect(() => {
+    if (retweetError) alert(retweetError);
+  }, [retweetError]);
 
   useEffect(() => {
     dispatch({
       type: LOAD_MY_INFO_REQUEST,
-    })
+    });
     dispatch({
       type: LOAD_POSTS_REQUEST,
     });
