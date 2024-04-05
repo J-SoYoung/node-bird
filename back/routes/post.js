@@ -5,7 +5,6 @@ const fs = require("fs");
 
 const { Post, Image, Comment, User, Hashtag } = require("../models");
 const { isLoggedIn } = require("./middlewares");
-const { error } = require("console");
 
 const router = express.Router();
 try {
@@ -37,7 +36,7 @@ router.post("/images", isLoggedIn, upload.array("image"), (req, res, next) => {
   res.json(req.files.map((v) => v.filename));
 });
 
-// Post /post 포스트작성
+// Post /post 포스트작성 ( text, image, hashtag )
 // 로그인 후에는 passport가 deserializeUser를 실행해 req.user에 접근가능
 router.post("/", isLoggedIn, upload.none(), async (req, res, next) => {
   try {
@@ -185,5 +184,154 @@ router.delete("/:postId", isLoggedIn, async (req, res, next) => {
     next(error);
   }
 });
+
+router.post("/:postId/retweet", isLoggedIn, async (req, res, next) => {
+  // POST /post/1/retweet
+  try {
+    const post = await Post.findOne({
+      where: { id: req.params.postId },
+      include: [
+        {
+          model: Post,
+          as: "Retweet",
+        },
+      ],
+    });
+    if (!post) {
+      return res.status(403).send("존재하지 않는 게시글입니다.");
+    }
+    if (
+      req.user.id === post.UserId ||
+      (post.Retweet && post.Retweet.UserId === req.user.id)
+    ) {
+      return res.status(403).send("자신의 글은 리트윗할 수 없습니다.");
+    }
+    const retweetTargetId = post.RetweetId || post.id;
+    const exPost = await Post.findOne({
+      where: {
+        UserId: req.user.id,
+        RetweetId: retweetTargetId,
+      },
+    });
+    if (exPost) {
+      return res.status(403).send("이미 리트윗했습니다.");
+    }
+    const retweet = await Post.create({
+      UserId: req.user.id,
+      RetweetId: retweetTargetId,
+      content: "retweet",
+    });
+    const retweetWithPrevPost = await Post.findOne({
+      where: { id: retweet.id },
+      include: [
+        {
+          model: Post,
+          as: "Retweet",
+          include: [
+            {
+              model: User,
+              attributes: ["id", "nickname"],
+            },
+            {
+              model: Image,
+            },
+          ],
+        },
+        {
+          model: User,
+          attributes: ["id", "nickname"],
+        },
+        {
+          model: Image,
+        },
+        {
+          model: Comment,
+          include: [
+            {
+              model: User,
+              attributes: ["id", "nickname"],
+            },
+          ],
+        },
+      ],
+    });
+    res.status(201).json(retweetWithPrevPost);
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+// Post /1/retweet 리트윗
+// router.post("/:postId/retweet", isLoggedIn, async (req, res, next) => {
+//   console.log('백back-postid', req.params.postId)
+
+//   try {
+//     const post = await Post.findOne({
+//       where: {
+//         id: req.params.postId,
+//         include: [
+//           {
+//             model: Post,
+//             as: "Retweet",
+//           },
+//         ],
+//       },
+//     });
+//     console.log("리트윗포스트retweet-", post);
+
+//     if (!post) {
+//       return res.status(403).send("존재하지 않는 게시글입니다.");
+//     }
+//     // 본인 게시글 리트윗 || 남이 내 게시글 리트윗하고 + 그것을 내가 리트윗하는 것 막기
+//     if (
+//       req.user.id === post.UserId ||
+//       (post.Retweet && post.Retweet.UserId === req.user.id)
+//     ) {
+//       return res.status(403).send("자신의 글은 리트윗 할 수 없습니다.");
+//     }
+//     // 리트윗한 게시글을 리트윗 할 수 있게
+//     const retweetTargetId = post.RetweetId || post.id;
+//     const exPost = await Post.findOne({
+//       where: {
+//         UserId: req.user.id,
+//         RetweetId: retweetTargetId,
+//       },
+//     });
+//     // 리트윗을 했는데 또 리트윗 하기는 막기
+//     if (exPost) {
+//       return res.status(403).send("이미 리트윗 한 글입니다.");
+//     }
+//     const retweet = await Post.create({
+//       UserId: req.user.id,
+//       RetweetId: retweetTargetId,
+//       content: "retweet",
+//     });
+//     const retweetWithPrevPost = await Post.findOne({
+//       where: { id: retweet.id },
+//       include: [
+//         {
+//           model: Post,
+//           as: "Retweet",
+//           include: [
+//             { model: User, attributes: ["id", "nickname"] },
+//             { model: Image },
+//           ],
+//         },
+//         { model: User, attributes: ["id", "nickname"] },
+//         { model: User, as: "Likers", attributes: ["id"] },
+//         { model: Image },
+//         {
+//           model: Comment,
+//           include: [{ model: User, attributes: ["id", "nickname"] }],
+//         },
+//       ],
+//     });
+//     console.log("retweetpost", retweetWithPrevPost);
+//     res.status(201).json(retweetWithPrevPost);
+//   } catch (error) {
+//     console.error(error);
+//     next(error);
+//   }
+// });
 
 module.exports = router;
