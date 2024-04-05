@@ -3,7 +3,7 @@ const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
 
-const { Post, Image, Comment, User } = require("../models");
+const { Post, Image, Comment, User, Hashtag } = require("../models");
 const { isLoggedIn } = require("./middlewares");
 const { error } = require("console");
 
@@ -38,14 +38,23 @@ router.post("/images", isLoggedIn, upload.array("image"), (req, res, next) => {
 });
 
 // Post /post 포스트작성
+// 로그인 후에는 passport가 deserializeUser를 실행해 req.user에 접근가능
 router.post("/", isLoggedIn, upload.none(), async (req, res, next) => {
-  // 로그인 후에는 passport가 deserializeUser를 실행해 req.user에 접근가능
-
   try {
     const post = await Post.create({
       content: req.body.content,
       UserId: req.user.id,
     });
+
+    const hashtags = req.body.content.match(/#[^\s]+/g);
+    if (hashtags) {
+      const result = await Promise.all(
+        hashtags.map((tag) =>
+          Hashtag.findOrCreate({ where: { name: tag.slice(1).toLowerCase() } })
+        )
+      ); // [[노드 true],[리액트 true]]
+      await post.addHashtags(result.map((v) => v[0]));
+    }
 
     if (req.body.image) {
       if (Array.isArray(req.body.image)) {
