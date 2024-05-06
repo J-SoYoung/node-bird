@@ -46,7 +46,7 @@ app.use("/", express.static(path.join(__dirname, "uploads")));
 app.use(express.urlencoded({ extended: true }));
 
 // session, cookie
-app.use(cookieParser("nodebirdsecret"));
+app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(
   session({
     saveUninitialized: false,
@@ -56,6 +56,7 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
+
 
 // router
 app.use("/post", postRouter);

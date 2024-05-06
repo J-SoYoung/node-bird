@@ -17,8 +17,8 @@ module.exports = () => {
           });
           if (!user) {
             // done(서버 에러, 성공, 클라이언트 에러)
-            return done(null, false, { reason: "존재하지 않는 이메일입니." });
-          }다
+            return done(null, false, { reason: "존재하지 않는 이메일입니다." });
+          }
           const result = await bcrypt.compare(password, user.password);
           if (result) {
             return done(null, user);
