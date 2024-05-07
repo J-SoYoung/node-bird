@@ -5,6 +5,10 @@ export const initialState = {
   loadMyInfoDone: false,
   loadMyInfoError: null,
 
+  loadUserLoading: false, // 특정 유저찾기 시도중
+  loadUserDone: false,
+  loadUserError: null,
+
   loginLoading: false, // 로그인 시도중
   loginDone: false,
   loginError: null,
@@ -16,14 +20,6 @@ export const initialState = {
   signUpLoading: false, // 회원가입 시도중
   signUpDone: false,
   signUpError: null,
-
-  loadFollowersLoading: false, // 팔로우 리스트 가져오기 시도중
-  loadFollowersDone: false,
-  loadFollowersError: null,
-
-  loadFollowingsLoading: false, // 팔로잉 리스트 가져오기 시도중
-  loadFollowingsDone: false,
-  loadFollowingsError: null,
 
   followLoading: false, // 팔로우 시도중
   followDone: false,
@@ -42,8 +38,7 @@ export const initialState = {
   changeNicknameError: null,
 
   me: null,
-  signUpData: {},
-  loginData: {},
+  userInfo: null,
 };
 
 // async Action
@@ -52,6 +47,10 @@ export const initialState = {
 export const LOAD_MY_INFO_REQUEST = "LOAD_MY_INFO_REQUEST";
 export const LOAD_MY_INFO_SUCCESS = "LOAD_MY_INFO_SUCCESS";
 export const LOAD_MY_INFO_FAILURE = "LOAD_MY_INFO_FAILURE";
+
+export const LOAD_USER_REQUEST = "LOAD_USER_REQUEST";
+export const LOAD_USER_SUCCESS = "LOAD_USER_SUCCESS";
+export const LOAD_USER_FAILURE = "LOAD_USER_FAILURE";
 
 export const SIGN_UP_REQUEST = "SIGN_UP_REQUEST";
 export const SIGN_UP_SUCCESS = "SIGN_UP_SUCCESS";
@@ -64,14 +63,6 @@ export const LOG_IN_FAILURE = "LOG_IN_FAILURE";
 export const LOG_OUT_REQUEST = "LOG_OUT_REQUEST";
 export const LOG_OUT_SUCCESS = "LOG_OUT_SUCCESS";
 export const LOG_OUT_FAILURE = "LOG_OUT_FAILURE";
-
-export const LOAD_FOLLOWERS_REQUEST = "LOAD_FOLLOWERS_REQUEST";
-export const LOAD_FOLLOWERS_SUCCESS = "LOAD_FOLLOWERS_SUCCESS";
-export const LOAD_FOLLOWERS_FAILURE = "LOAD_FOLLOWERS_FAILURE";
-
-export const LOAD_FOLLOWINGS_REQUEST = "LOAD_FOLLOWINGS_REQUEST";
-export const LOAD_FOLLOWINGS_SUCCESS = "LOAD_FOLLOWINGS_SUCCESS";
-export const LOAD_FOLLOWINGS_FAILURE = "LOAD_FOLLOWINGS_FAILURE";
 
 export const FOLLOW_REQUEST = "FOLLOW_REQUEST";
 export const FOLLOW_SUCCESS = "FOLLOW_SUCCESS";
@@ -130,6 +121,25 @@ const reducer = (state = initialState, action) => {
         draft.loadMyInfoLoading = false;
         draft.loadMyInfoDone = false;
         draft.loadMyInfoError = action.error;
+        break;
+      }
+
+      case LOAD_USER_REQUEST: {
+        draft.loadUserLoading = true;
+        draft.loadUserDone = false;
+        draft.loadUserError = null;
+        break;
+      }
+      case LOAD_USER_SUCCESS: {
+        draft.loadUserLoading = false;
+        draft.loadUserDone = true;
+        draft.userInfo = action.data;
+        break;
+      }
+      case LOAD_USER_FAILURE: {
+        draft.loadUserLoading = false;
+        draft.loadUserDone = false;
+        draft.loadUserError = action.error;
         break;
       }
 
@@ -266,44 +276,6 @@ const reducer = (state = initialState, action) => {
         draft.removeFollowerLoading = false;
         draft.removeFollowerDone = false;
         draft.removeFollowerError = action.error;
-        break;
-      }
-
-      case LOAD_FOLLOWERS_REQUEST: {
-        draft.loadFollowersLoading = true;
-        draft.loadFollowersDone = false;
-        draft.loadFollowersError = null;
-        break;
-      }
-      case LOAD_FOLLOWERS_SUCCESS: {
-        draft.me.Followers = action.data;
-        draft.loadFollowersLoading = false;
-        draft.loadFollowersDone = true;
-        break;
-      }
-      case LOAD_FOLLOWERS_FAILURE: {
-        draft.loadFollowersLoading = false;
-        draft.loadFollowersDone = false;
-        draft.loadFollowersError = action.error;
-        break;
-      }
-
-      case LOAD_FOLLOWINGS_REQUEST: {
-        draft.loadFollowingsLoading = true;
-        draft.loadFollowingsDone = false;
-        draft.loadFollowingsError = null;
-        break;
-      }
-      case LOAD_FOLLOWINGS_SUCCESS: {
-        draft.me.Followings = action.data;
-        draft.loadFollowingsLoading = false;
-        draft.loadFollowingsDone = true;
-        break;
-      }
-      case LOAD_FOLLOWINGS_FAILURE: {
-        draft.loadFollowingsLoading = false;
-        draft.loadFollowingsDone = false;
-        draft.loadFollowingsError = action.error;
         break;
       }
 
