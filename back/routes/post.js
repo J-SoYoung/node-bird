@@ -103,6 +103,58 @@ router.post("/", isLoggedIn, upload.none(), async (req, res, next) => {
   }
 });
 
+// GET /post/1 포스트 한개 불러오기
+router.get("/:postId", async (req, res, next) => {
+  try {
+    const post = await Post.findOne({
+      where: { id: req.params.postId },
+    });
+    if (!post) {
+      return res.status(403).send("존재하지 않는 게시글입니다.");
+    }
+    const fullPost = await Post.findOne({
+      where: { id: post.id },
+      include: [
+        {
+          model: User, // 게시글 작성자
+          attributes: ["id", "nickname"],
+        },
+        {
+          model: User, // 좋아요 누른 사람
+          as: "Likers",
+          attributes: ["id"],
+        },
+        { model: Image },
+        {
+          model: Comment,
+          include: [
+            {
+              model: User,
+              attributes: ["id", "nickname"],
+            },
+          ],
+        },
+        {
+          model: Post,
+          as: "Retweet",
+          include: [
+            {
+              model: User,
+              attributes: ["id", "nickname"],
+            },
+            { model: Image },
+          ],
+        },
+      ],
+    });
+    console.log("전체포스트", fullPost);
+    res.status(201).json(fullPost);
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
 // Post /1/comment 댓글작성
 router.post("/:postId/comment", isLoggedIn, async (req, res, next) => {
   try {
@@ -185,6 +237,7 @@ router.delete("/:postId", isLoggedIn, async (req, res, next) => {
   }
 });
 
+// POST /1/retweet 리트윗
 router.post("/:postId/retweet", isLoggedIn, async (req, res, next) => {
   // POST /post/1/retweet
   try {
