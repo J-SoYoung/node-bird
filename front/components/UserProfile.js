@@ -5,12 +5,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { logoutRequestsAction } from "../reducers/user";
 import Link from "next/link";
 
-const UserProfile = ({ me }) => {
+const UserProfile = () => {
   const dispatch = useDispatch();
-  const { logOutLoading } = useSelector((state) => state.user);
+  const { me, logOutLoading } = useSelector((state) => state.user);
 
   // useEffect(() => {}, [me]);
-  // console.log(me);
+  console.log(me);
 
   const onLogOut = useCallback(() => {
     dispatch(logoutRequestsAction());
@@ -26,9 +26,6 @@ const UserProfile = ({ me }) => {
           />
         }
         actions={[
-          // <Link key={idx} href={`/hashtag/${v.slice(1)}`}>
-          //   {v}
-          // </Link>
           <Link key="twit" href={`/user/${me.id}`}>
             포스트 <br /> {me.Posts.length}
           </Link>,

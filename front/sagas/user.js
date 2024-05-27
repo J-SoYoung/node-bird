@@ -88,6 +88,7 @@ function* logOut() {
     });
   }
 }
+
 function loadMyInfoAPI() {
   return axios.get("/user");
 }
@@ -105,6 +106,7 @@ function* loadMyInfo() {
     });
   }
 }
+
 function loadUserAPI(data) {
   return axios.get(`/user/${data}`);
 }
@@ -161,6 +163,42 @@ function* follow(action) {
   }
 }
 
+function loadFollowersAPI(data) {
+  return axios.get(`/user/followers`);
+}
+function* loadFollowers(action) {
+  try {
+    const result = yield call(loadFollowersAPI, action.data);
+    yield put({
+      type: LOAD_FOLLOWERS_SUCCESS,
+      data: result.data,
+    });
+  } catch (error) {
+    yield put({
+      type: LOAD_FOLLOWERS_FAILURE,
+      error: error.response.data,
+    });
+  }
+}
+
+function loadFollowingsAPI(data) {
+  return axios.get(`/user/followings`);
+}
+function* loadFollowings(action) {
+  try {
+    const result = yield call(loadFollowingsAPI, action.data);
+    yield put({
+      type: LOAD_FOLLOWINGS_SUCCESS,
+      data: result.data,
+    });
+  } catch (error) {
+    yield put({
+      type: LOAD_FOLLOWINGS_FAILURE,
+      error: error.response.data,
+    });
+  }
+}
+
 function changeNicknameAPI(data) {
   return axios.patch("/user/nickname", { nickname: data });
 }
@@ -198,6 +236,12 @@ function* removeFollower(action) {
   }
 }
 
+function* watchLoadFollowers() {
+  yield takeLatest(LOAD_FOLLOWERS_REQUEST, loadFollowers);
+}
+function* watchLoadFollowings() {
+  yield takeLatest(LOAD_FOLLOWINGS_REQUEST, loadFollowings);
+}
 function* watchLoadUser() {
   yield takeLatest(LOAD_USER_REQUEST, loadUser);
 }
@@ -231,6 +275,8 @@ export default function* userSaga() {
     fork(watchRemoveFollowers),
     fork(watchChangeNickname),
     fork(watchFollow),
+    fork(watchLoadFollowers),
+    fork(watchLoadFollowings),
     fork(watchUnFollow),
     fork(watchSignup),
     fork(watchLogIn),
