@@ -1,3 +1,5 @@
+// post/[id] 
+
 import React from "react";
 import { useRouter } from "next/router";
 import wrapper from "../../store/configureStore";
@@ -15,6 +17,11 @@ const Post = () => {
   const { id } = router.query;
 
   const { singlePost } = useSelector((state) => state.post);
+  console.log(singlePost);
+
+  if (!singlePost) {
+    return <div>작성된 포스트가 없습니다</div>;
+  }
   return (
     <AppLayout>
       <Head>

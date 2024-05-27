@@ -6,23 +6,23 @@ export let initialState = {
   singlePost: null,
   hasMorePosts: true,
 
-  LoadPostsLoaing: false,
-  LoadPostsDone: false,
-  LoadPostsError: null,
+  loadPostsLoading: false,
+  loadPostsDone: false,
+  loadPostsError: null,
 
-  LoadPostLoaing: false,
-  LoadPostDone: false,
-  LoadPostError: null,
+  loadPostLoading: false,
+  loadPostDone: false,
+  loadPostError: null,
 
-  addPostLoaing: false,
+  addPostLoading: false,
   addPostDone: false,
   addPostError: null,
 
-  removePostLoaing: false,
+  removePostLoading: false,
   removePostDone: false,
   removePostError: null,
 
-  addCommentLoaing: false,
+  addCommentLoading: false,
   addCommentDone: false,
   addCommentError: null,
 
@@ -63,6 +63,14 @@ export let initialState = {
 //         },
 //       ],
 //     }));
+
+export const LOAD_USER_POSTS_REQUEST = "LOAD_USER_POSTS_REQUEST";
+export const LOAD_USER_POSTS_SUCCESS = "LOAD_USER_POSTS_SUCCESS";
+export const LOAD_USER_POSTS_FAILURE = "LOAD_USER_POSTS_FAILURE";
+
+export const LOAD_HASHTAG_POSTS_REQUEST = "LOAD_HASHTAG_POSTS_REQUEST";
+export const LOAD_HASHTAG_POSTS_SUCCESS = "LOAD_HASHTAG_POSTS_SUCCESS";
+export const LOAD_HASHTAG_POSTS_FAILURE = "LOAD_HASHTAG_POSTS_FAILURE";
 
 export const LOAD_POSTS_REQUEST = "LOAD_POSTS_REQUEST";
 export const LOAD_POSTS_SUCCESS = "LOAD_POSTS_SUCCESS";
@@ -118,70 +126,76 @@ export const addCommentRequestAction = (data) => {
 const reducer = (state = initialState, action) => {
   return produce(state, (draft) => {
     switch (action.type) {
+      case LOAD_USER_POSTS_REQUEST:
+      case LOAD_HASHTAG_POSTS_REQUEST:
       case LOAD_POSTS_REQUEST: {
-        draft.LoadPostsLoaing = true;
-        draft.LoadPostsDone = false;
-        draft.LoadPostsError = null;
+        draft.loadPostsLoading = true;
+        draft.loadPostsDone = false;
+        draft.loadPostsError = null;
         break;
       }
+      case LOAD_USER_POSTS_SUCCESS:
+      case LOAD_HASHTAG_POSTS_SUCCESS:
       case LOAD_POSTS_SUCCESS: {
-        draft.LoadPostsLoaing = false;
-        draft.LoadPostsDone = true;
+        draft.loadPostsLoading = false;
+        draft.loadPostsDone = true;
         draft.mainPosts.push(...action.data);
         draft.hasMorePosts = action.data.length === 10;
         break;
       }
+      case LOAD_USER_POSTS_FAILURE:
+      case LOAD_HASHTAG_POSTS_FAILURE:
       case LOAD_POSTS_FAILURE: {
-        draft.LoadPostsLoaing = false;
-        draft.LoadPostsError = action.error;
+        draft.loadPostsLoading = false;
+        draft.loadPostsError = action.error;
         break;
       }
       case LOAD_POST_REQUEST: {
-        draft.LoadPostLoaing = true;
-        draft.LoadPostDone = false;
-        draft.LoadPostError = null;
+        draft.loadPostLoading = true;
+        draft.loadPostDone = false;
+        draft.loadPostError = null;
         break;
       }
       case LOAD_POST_SUCCESS: {
-        draft.LoadPostLoaing = false;
-        draft.LoadPostDone = true;
+        draft.loadPostLoading = false;
+        draft.loadPostDone = true;
         draft.singlePost = action.data;
         break;
       }
       case LOAD_POST_FAILURE: {
-        draft.LoadPostLoaing = false;
-        draft.LoadPostError = action.error;
+        draft.loadPostLoading = false;
+        draft.loadPostError = action.error;
         break;
       }
 
       case ADD_POST_REQUEST: {
-        draft.addPostLoaing = true;
+        draft.addPostLoading = true;
         draft.addPostDone = false;
         draft.addPostError = null;
         break;
       }
       case ADD_POST_SUCCESS: {
-        draft.addPostLoaing = false;
+        draft.addPostLoading = false;
         draft.addPostDone = true;
         draft.mainPosts.unshift(action.data);
         draft.imagePaths = [];
         break;
       }
       case ADD_POST_FAILURE: {
-        draft.addPostLoaing = false;
+        draft.addPostLoading = false;
         draft.addPostDone = false;
         draft.addPostError = action.error;
         break;
       }
 
       case REMOVE_POST_REQUEST: {
-        draft.removePostLoaing = true;
+        draft.removePostLoading = true;
         draft.removePostDone = false;
         draft.removePostError = null;
         break;
       }
       case REMOVE_POST_SUCCESS: {
-        draft.removePostLoaing = false;
+        draft.removePostLoading = false;
         draft.removePostDone = true;
         draft.mainPosts = draft.mainPosts.filter(
           (v) => Number(v.id) !== Number(action.data.PostId)
@@ -189,13 +203,13 @@ const reducer = (state = initialState, action) => {
         break;
       }
       case REMOVE_POST_FAILURE: {
-        draft.removePostLoaing = false;
+        draft.removePostLoading = false;
         draft.removePostError = action.error;
         break;
       }
 
       case ADD_COMMENT_REQUEST: {
-        draft.addCommentLoaing = true;
+        draft.addCommentLoading = true;
         draft.addCommentDone = false;
         draft.addCommentError = null;
         break;
@@ -205,7 +219,7 @@ const reducer = (state = initialState, action) => {
           (v) => Number(v.id) === Number(action.data.PostId)
         );
         post.Comments.unshift(action.data);
-        draft.addCommentLoaing = false;
+        draft.addCommentLoading = false;
         draft.addCommentDone = true;
         break;
 
@@ -219,7 +233,7 @@ const reducer = (state = initialState, action) => {
         // draft.mainPosts = [...mainPosts];
       }
       case ADD_COMMENT_FAILURE: {
-        draft.addCommentLoaing = false;
+        draft.addCommentLoading = false;
         draft.addCommentError = action.error;
         break;
       }

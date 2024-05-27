@@ -3,11 +3,14 @@ import React, { useCallback, useEffect } from "react";
 import { Avatar, Button, Card } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutRequestsAction } from "../reducers/user";
+import Link from "next/link";
 
-const UserProfile = () => {
+const UserProfile = ({ me }) => {
   const dispatch = useDispatch();
-  const { me, logOutLoading } = useSelector((state) => state.user);
-  useEffect(() => {}, []);
+  const { logOutLoading } = useSelector((state) => state.user);
+
+  // useEffect(() => {}, [me]);
+  // console.log(me);
 
   const onLogOut = useCallback(() => {
     dispatch(logoutRequestsAction());
@@ -23,9 +26,12 @@ const UserProfile = () => {
           />
         }
         actions={[
-          <div key="twit">
+          // <Link key={idx} href={`/hashtag/${v.slice(1)}`}>
+          //   {v}
+          // </Link>
+          <Link key="twit" href={`/user/${me.id}`}>
             포스트 <br /> {me.Posts.length}
-          </div>,
+          </Link>,
           <div key="followings">
             팔로잉 <br />
             {me.Followings.length}
