@@ -8,7 +8,9 @@ import {
 import { Avatar, Button, Card, Comment, Popover } from "antd";
 import React, { useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import Link from "next/link";
 import PropTypes from "prop-types";
+
 import PostImages from "./PostImages";
 import CommentForm from "./CommentForm";
 import PostCardContent from "./PostCardContent";
@@ -124,7 +126,11 @@ const PostCard = ({ post }) => {
             }
           >
             <Card.Meta
-              avatar={<Avatar>{post.Retweet.User?.nickname[0]}</Avatar>}
+              avatar={
+                <Link href={`/user/${post.Retweet.User.id}`}>
+                  <Avatar>{post.Retweet.User?.nickname[0]}</Avatar>
+                </Link>
+              }
               title={post.Retweet.User?.nickname}
               description={
                 <PostCardContent
@@ -135,7 +141,11 @@ const PostCard = ({ post }) => {
           </Card>
         ) : (
           <Card.Meta
-            avatar={<Avatar>{post.User?.nickname[0]}</Avatar>}
+            avatar={
+              <Link href={`/user/${post.User.id}`}>
+                <Avatar>{post.User?.nickname[0]}</Avatar>
+              </Link>
+            }
             title={post.User?.nickname}
             description={
               <PostCardContent postData={post.content}></PostCardContent>
@@ -152,7 +162,7 @@ const PostCard = ({ post }) => {
               <Comment
                 key={c.id}
                 author={c.User.nickname}
-                avatar={<Avatar>{c.User.nickname[0]}</Avatar>}
+                avatar={<Link href={`/user/${c.User.id}`}><Avatar>{c.User.nickname[0]}</Avatar></Link>}
                 content={c.content}
               />
             );

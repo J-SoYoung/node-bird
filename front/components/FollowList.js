@@ -15,8 +15,9 @@ const ButtonWrapper = styled.div`
   margin: 10px 0;
 `;
 const FollowList = ({ header, data }) => {
-  const dispatch = useDispatch();
+  console.log('팔로우리스트 컴포넌트',data);
 
+  const dispatch = useDispatch();
   const onClickUnFollow = (id) => {
     if (header === "팔로잉") {
       dispatch({
@@ -31,6 +32,7 @@ const FollowList = ({ header, data }) => {
     }
   };
 
+  if (!data) return <div>로딩중입니다</div>;
   return (
     <>
       <ListWrapper

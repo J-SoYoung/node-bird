@@ -46,7 +46,7 @@ function* signUp(action) {
       type: SIGN_UP_SUCCESS,
     });
   } catch (error) {
-    console.log("회원가입errorr", error);
+    console.log(error);
     yield put({
       type: SIGN_UP_FAILURE,
       error: error.response.data,
@@ -99,10 +99,10 @@ function* loadMyInfo() {
       type: LOAD_MY_INFO_SUCCESS,
       data: result.data,
     });
-  } catch (error) {
+  } catch (err) {
     yield put({
       type: LOAD_MY_INFO_FAILURE,
-      error: error.response.data,
+      error: err.response.data,
     });
   }
 }
@@ -132,7 +132,6 @@ function unFollowAPI(data) {
 function* unFollow(action) {
   try {
     const result = yield call(unFollowAPI, action.data);
-    console.log("언팔로우데이터,", result);
     yield put({
       type: UNFOLLOW_SUCCESS,
       data: result.data,

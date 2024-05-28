@@ -138,7 +138,6 @@ function loadUserPostsAPI(data, lastId) {
 }
 function* loadUserPosts(action) {
   try {
-    console.log("특정유저게시글", action);
     const result = yield call(loadUserPostsAPI, action.data, action.lastId);
     yield put({
       type: LOAD_USER_POSTS_SUCCESS,
@@ -249,13 +248,11 @@ function* upladImages(action) {
 }
 
 function retweetAPI(data) {
-  console.log("saga리트윗", data);
   return axios.post(`/post/${data}/retweet`);
 }
 function* retweet(action) {
   try {
     const result = yield call(retweetAPI, action.data);
-    console.log("사가 retweet", result);
     yield put({
       type: RETWEET_SUCCESS,
       data: result.data,

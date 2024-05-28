@@ -14,13 +14,11 @@ const FollowButton = ({ post }) => {
 
   const onClickFollow = useCallback(() => {
     if (isFollowing) {
-      console.log("v언팔로우감");
       dispatch({
         type: UNFOLLOW_REQUEST,
         data: post.User.id,
       });
     } else {
-      console.log("v팔로우감");
       dispatch({
         type: FOLLOW_REQUEST,
         data: post.User.id,
