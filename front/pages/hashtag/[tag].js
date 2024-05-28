@@ -62,7 +62,6 @@ const Hashtag = () => {
 
 export const getServerSideProps = wrapper.getServerSideProps(
   async (context) => {
-    console.log("해시태그 ");
     const cookie = context.req ? context.req.headers.cookie : "";
     axios.defaults.headers.Cookie = "";
     if (context.req && cookie) {
