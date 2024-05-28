@@ -96,12 +96,18 @@ router.get("/", async (req, res, next) => {
 // GET /user/followers ( 팔로워 리스트 가져오기 )
 router.get("/followers", isLoggedIn, async (req, res, next) => {
   try {
-    const user = await User.findOne({ where: { id: req.user.id } });
+    const user = await User.findOne({
+      where: { id: req.user.id },
+    });
     if (!user) {
       res.status(403).send("없는 사람을 찾으려고 하시네요!");
     }
-
-    const followers = await user.getFollowers({ limit: 3 });
+    const followers = await user.getFollowers({
+      limit: 3,
+      attributes: {
+        exclude: ["password"],
+      },
+    });
     console.log("팔로워리스트", followers);
     res.status(200).json(followers);
   } catch (error) {
@@ -113,13 +119,24 @@ router.get("/followers", isLoggedIn, async (req, res, next) => {
 // GET /user/followings ( 팔로잉 리스트 가져오기 )
 router.get("/followings", isLoggedIn, async (req, res, next) => {
   try {
-    const user = await User.findOne({ where: { id: req.user.id } });
+    const user = await User.findOne({
+      where: { id: req.user.id },
+      attributes: {
+        exclude: ["password"],
+      },
+    });
     if (!user) {
       res.status(403).send("없는 사람을 찾으려고 하시네요!");
     }
 
-    const followings = await user.getFollowings({ limit: 3 });
-    console.log('팔로잉리스트', followings)
+    const followings = await user.getFollowings({
+      limit: 3,
+      attributes: {
+        exclude: ["password"],
+      },
+    });
+    console.log("팔로잉리스트", followings);
+
     res.status(200).json(followings);
   } catch (error) {
     console.error(error);
@@ -129,7 +146,6 @@ router.get("/followings", isLoggedIn, async (req, res, next) => {
 
 // GET/user/1 ( 특정 유저 찾기 )
 router.get("/:userId", async (req, res, next) => {
-  console.log("파람", req.params.userId);
   try {
     const fullUserWithoutPassword = await User.findOne({
       where: { id: req.params.userId },
@@ -170,7 +186,6 @@ router.get("/:userId", async (req, res, next) => {
 
 // GET /user/1/posts ( 특정 사용자의 게시글 찾기 )
 router.get("/:userId/posts", async (req, res, next) => {
-  console.log("어디요청감");
   try {
     const where = { UserId: req.params.userId };
     if (parseInt(req.query.lastId, 10)) {

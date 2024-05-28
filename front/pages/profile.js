@@ -5,19 +5,24 @@ import Router from "next/router";
 import Head from "next/head";
 import { END } from "redux-saga";
 
-import { LOAD_FOLLOWERS_REQUEST, LOAD_FOLLOWINGS_REQUEST, LOAD_MY_INFO_REQUEST } from "../reducers/user";
+import {
+  LOAD_FOLLOWERS_REQUEST,
+  LOAD_FOLLOWINGS_REQUEST,
+  LOAD_MY_INFO_REQUEST,
+} from "../reducers/user";
 import wrapper from "../store/configureStore";
 import AppLayout from "../components/AppLayout";
 import FollowList from "../components/FollowList";
 import NicknameEditForm from "../components/NicknameEditForm";
 
-
 const Profile = () => {
-  const dispatch = useDispatch();
+
   const {
     me,
     followersInfo,
     followingsInfo,
+    loadFollowingsLoading,
+    loadFollowersLoading,
     loadFollowersError,
     loadFollowingsError,
   } = useSelector((state) => state.user);
@@ -26,11 +31,12 @@ const Profile = () => {
 
   useEffect(() => {
     if (!(me && me.id)) {
-      Router.push("/");
+      return Router.push("/");
     }
-
     if (!me) return <div>내 정보 로딩중</div>;
-
+    if (loadFollowersLoading || loadFollowingsLoading) {
+      return <div>팔로잉/팔로워 목록을 로딩중입니다</div>;
+    }
     if (loadFollowersError || loadFollowingsError) {
       return <div>팔로잉/팔로워 로딩 중 에러가 발생합니다</div>;
     }

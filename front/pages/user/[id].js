@@ -5,12 +5,13 @@ import { useRouter } from "next/router";
 import wrapper from "../../store/configureStore";
 import { END } from "redux-saga";
 
-import { LOAD_USER_REQUEST } from "../../reducers/user";
+import { LOAD_MY_INFO_REQUEST, LOAD_USER_REQUEST } from "../../reducers/user";
 import { LOAD_USER_POSTS_REQUEST } from "../../reducers/post";
 import AppLayout from "../../components/AppLayout";
 import PostCard from "../../components/PostCard";
 import Head from "next/head";
 import { Avatar, Card } from "antd";
+import Link from "next/link";
 
 const User = () => {
   const dispatch = useDispatch();
@@ -19,8 +20,8 @@ const User = () => {
   const { mainPosts, hasMorePosts, loadPostsLoading } = useSelector(
     (state) => state.post
   );
-  const { userInfo } = useSelector((state) => state.user);
-
+  const { me, userInfo } = useSelector((state) => state.user);
+  
   useEffect(() => {
     const userScroll = window.scrollY;
     const clientHeight = document.documentElement.clientHeight;
@@ -85,14 +86,18 @@ const User = () => {
                 {userInfo.Posts}
               </div>,
               <div key="following">
-                팔로잉
-                <br />
-                {userInfo.Followings}
+                <Link href={"/profile"}>
+                  팔로잉
+                  <br />
+                  {userInfo.Followings}
+                </Link>
               </div>,
               <div key="follower">
-                팔로워
-                <br />
-                {userInfo.Followers}
+                <Link href={"/profile"}>
+                  팔로워
+                  <br />
+                  {userInfo.Followers}
+                </Link>
               </div>,
             ]}
           >
@@ -124,6 +129,9 @@ export const getServerSideProps = wrapper.getServerSideProps(
     context.store.dispatch({
       type: LOAD_USER_REQUEST,
       data: context.params.id,
+    });
+    context.store.dispatch({
+      type: LOAD_MY_INFO_REQUEST,
     });
     context.store.dispatch(END);
     await context.store.sagaTask.toPromise();

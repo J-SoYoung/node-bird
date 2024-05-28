@@ -9,9 +9,6 @@ const UserProfile = () => {
   const dispatch = useDispatch();
   const { me, logOutLoading } = useSelector((state) => state.user);
 
-  // useEffect(() => {}, [me]);
-  console.log(me);
-
   const onLogOut = useCallback(() => {
     dispatch(logoutRequestsAction());
   }, []);
@@ -26,16 +23,23 @@ const UserProfile = () => {
           />
         }
         actions={[
-          <Link key="twit" href={`/user/${me.id}`}>
-            포스트 <br /> {me.Posts.length}
-          </Link>,
+          <div key="twit">
+            <Link href={`/user/${me.id}`}>
+              포스트 <br />
+              {me.Posts.length}
+            </Link>
+          </div>,
           <div key="followings">
-            팔로잉 <br />
-            {me.Followings.length}
+            <Link href={`/profile`}>
+              팔로잉 <br />
+              {me.Followings.length}
+            </Link>
           </div>,
           <div key="follower">
-            팔로우 <br />
-            {me.Followers.length}
+            <Link href={`/profile`}>
+              팔로우 <br />
+              {me.Followers.length}
+            </Link>
           </div>,
         ]}
       >
@@ -52,8 +56,3 @@ const UserProfile = () => {
 };
 
 export default UserProfile;
-
-// 어떤 타입을 써야 하나?
-// UserProfile.propTypes = {
-//   setIsLoggedIn: PropTypes.string.isRequired,
-// };
