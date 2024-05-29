@@ -10,6 +10,7 @@ import React, { useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
 import PropTypes from "prop-types";
+import moment from "moment";
 
 import PostImages from "./PostImages";
 import CommentForm from "./CommentForm";
@@ -21,6 +22,8 @@ import {
   RETWEET_REQUEST,
 } from "../reducers/post";
 import FollowButton from "./FollowButton";
+
+moment.locale("ko");
 
 const PostCard = ({ post }) => {
   const dispatch = useDispatch();
@@ -125,6 +128,9 @@ const PostCard = ({ post }) => {
               post.Retweet.Images && <PostImages images={post.Retweet.Images} />
             }
           >
+            <div style={{ float: "right" }}>
+              {moment(post.createdAt).format("YYYY.MM.DD")}
+            </div>
             <Card.Meta
               avatar={
                 <Link href={`/user/${post.Retweet.User.id}`}>
@@ -140,17 +146,22 @@ const PostCard = ({ post }) => {
             />
           </Card>
         ) : (
-          <Card.Meta
-            avatar={
-              <Link href={`/user/${post.User.id}`}>
-                <Avatar>{post.User?.nickname[0]}</Avatar>
-              </Link>
-            }
-            title={post.User?.nickname}
-            description={
-              <PostCardContent postData={post.content}></PostCardContent>
-            }
-          />
+          <>
+            <div style={{ float: "right" }}>
+              {moment(post.createdAt).format("YYYY.MM.DD")}
+            </div>
+            <Card.Meta
+              avatar={
+                <Link href={`/user/${post.User.id}`}>
+                  <Avatar>{post.User?.nickname[0]}</Avatar>
+                </Link>
+              }
+              title={post.User?.nickname}
+              description={
+                <PostCardContent postData={post.content}></PostCardContent>
+              }
+            />
+          </>
         )}
       </Card>
       {commentFormOpen && (
@@ -159,12 +170,21 @@ const PostCard = ({ post }) => {
           <div>{`${post.Comments.length}개의 댓글`}</div>
           {post.Comments.map((c) => {
             return (
-              <Comment
-                key={c.id}
-                author={c.User.nickname}
-                avatar={<Link href={`/user/${c.User.id}`}><Avatar>{c.User.nickname[0]}</Avatar></Link>}
-                content={c.content}
-              />
+              <>
+                <div style={{ float: "right" }}>
+                  {moment(post.createdAt).format("YYYY.MM.DD")}
+                </div>
+                <Comment
+                  key={c.id}
+                  author={c.User.nickname}
+                  avatar={
+                    <Link href={`/user/${c.User.id}`}>
+                      <Avatar>{c.User.nickname[0]}</Avatar>
+                    </Link>
+                  }
+                  content={c.content}
+                />
+              </>
             );
           })}
         </div>
